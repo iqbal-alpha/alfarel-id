@@ -11,12 +11,20 @@ export const translations = {
     search_reset: "Reset Pencarian",
 
     // Hero
-    hero_badge: "Koleksi Pesisir & Resort 2026",
+    hero_badge: "SUMMER 2026 · RESORT DROP",
     hero_title_1: "Wear The",
     hero_title_highlight: "Vacation Feeling",
     hero_subtitle: "Koleksi busana kasual pantai berbahan linen sejuk & katun ringan. Didesain untuk kenyamanan liburan, santai kafe sore, hingga hangout akhir pekan.",
     hero_cta: "Jelajahi Koleksi",
     hero_fast_order: "Order Cepat via WhatsApp",
+    quick_search_placeholder: "Cari kemeja, boardshorts, kaos...",
+    quick_category_select: "Pilih Kategori",
+    quick_search_btn: "Temukan Pakaian",
+    model_badge: "Koleksi Eksklusif · 100% Breathable Fabric",
+    bento_section_title: "Koleksi Kategori",
+    bento_section_subtitle: "Eksplorasi busana kasual pesisir berkualitas tinggi",
+    bestseller_title: "Koleksi Terlaris",
+    bestseller_subtitle: "Pilihan favorit dengan bahan serat alami terbaik",
 
     // Categories
     cat_all: "Semua Koleksi",
@@ -112,12 +120,20 @@ export const translations = {
     search_reset: "Reset Search",
 
     // Hero
-    hero_badge: "Resort & Coastal Collection 2026",
+    hero_badge: "SUMMER 2026 · RESORT DROP",
     hero_title_1: "Wear The",
     hero_title_highlight: "Vacation Feeling",
     hero_subtitle: "Relaxed coastal resort wear crafted from breathable linen & featherlight cotton. Tailored for seaside holidays, golden-hour cafe chillouts, and effortless weekends.",
     hero_cta: "Explore Collections",
     hero_fast_order: "Instant WhatsApp Checkout",
+    quick_search_placeholder: "Search shirts, boardshorts, tees...",
+    quick_category_select: "Select Category",
+    quick_search_btn: "Find Apparel",
+    model_badge: "Exclusive Drop · 100% Breathable Fabric",
+    bento_section_title: "Curated Categories",
+    bento_section_subtitle: "Explore high-quality coastal & resort wardrobe staples",
+    bestseller_title: "Bestseller Products",
+    bestseller_subtitle: "Customer favorites made with lightweight natural fibers",
 
     // Categories
     cat_all: "All Collections",

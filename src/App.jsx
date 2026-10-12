@@ -15,6 +15,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AdminPanel } from './components/AdminPanel';
 import { Logo } from './components/Logo';
+import { CategoryBentoGrid } from './components/CategoryBentoGrid';
 
 import { Sparkles, MessageCircle, Heart, Shield, RefreshCw, Search, Check } from 'lucide-react';
 
@@ -86,6 +87,19 @@ export function MainStore() {
     }, 300);
   };
 
+  const handleQuickSearch = ({ query, category }) => {
+    if (query !== undefined && query.trim() !== '') {
+      setSearchQuery(query);
+    }
+    if (category) {
+      setActiveCategory(category);
+    }
+    const catalogEl = document.getElementById('catalog');
+    if (catalogEl) {
+      catalogEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const announcementText =
     lang === 'en' ? storeSettings.announcement_en : storeSettings.announcement_id;
 
@@ -113,15 +127,27 @@ export function MainStore() {
         />
       ) : (
         <main style={{ flex: 1 }}>
-          {/* 3. Hero Showcase Banner */}
+          {/* 3. Hero Showcase Banner (Split 2-Column + Mobile Quick Search) */}
           <HeroBanner
             onExploreClick={() => {
               const el = document.getElementById('catalog');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
+            onQuickSearch={handleQuickSearch}
+            categories={categories}
           />
 
-          {/* 4. Catalog Section */}
+          {/* 4. Category Bento Showcase Grid (Reference Image 3) */}
+          <CategoryBentoGrid
+            onSelectCategory={(catId) => {
+              setActiveCategory(catId);
+              const el = document.getElementById('catalog');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            activeCategory={activeCategory}
+          />
+
+          {/* 5. Bestseller Catalog Section (Reference Image 4) */}
           <section id="catalog" style={{ padding: '2.5rem 0 5rem' }}>
             <div className="container">
               {/* Catalog Section Header & Search */}
@@ -136,11 +162,11 @@ export function MainStore() {
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--color-primary)', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     <Sparkles size={14} />
-                    <span>AlfaREL.ID Essentials</span>
+                    <span>{t('bestseller_title')}</span>
                   </div>
                   <h2 style={{
                     fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                    fontSize: 'clamp(1.5rem, 3vw, 2.1rem)',
                     fontWeight: 800,
                     color: 'var(--text-primary)',
                     marginTop: '0.2rem'

@@ -24,6 +24,7 @@ export const initialProducts = [
     ],
     sizes: ['S', 'M', 'L', 'XL'],
     colors: ['Sand Beige', 'Natural White'],
+    colorHexes: ['#D7C9B1', '#FAF7F2'],
     stockStatus: 'ready',
     isFeatured: true,
     isActive: true
@@ -45,6 +46,7 @@ export const initialProducts = [
     ],
     sizes: ['M', 'L', 'XL'],
     colors: ['Navy / White Stripe'],
+    colorHexes: ['#1E3A5F', '#A3C4DC'],
     stockStatus: 'low_stock',
     isFeatured: true,
     isActive: true
@@ -66,6 +68,7 @@ export const initialProducts = [
     ],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     colors: ['Sunset Terracotta'],
+    colorHexes: ['#C86D51', '#707A57'],
     stockStatus: 'ready',
     isFeatured: false,
     isActive: true
@@ -87,6 +90,7 @@ export const initialProducts = [
     ],
     sizes: ['S', 'M', 'L', 'XL'],
     colors: ['Sage Olive', 'Coast Sand'],
+    colorHexes: ['#7A9A8B', '#C9B99A'],
     stockStatus: 'ready',
     isFeatured: true,
     isActive: true
@@ -107,6 +111,7 @@ export const initialProducts = [
     ],
     sizes: ['M', 'L', 'XL'],
     colors: ['Deep Ocean Navy'],
+    colorHexes: ['#1B2E4B', '#486581'],
     stockStatus: 'ready',
     isFeatured: false,
     isActive: true
@@ -127,6 +132,7 @@ export const initialProducts = [
     ],
     sizes: ['S', 'M', 'L', 'XL'],
     colors: ['Natural Sand', 'Charcoal'],
+    colorHexes: ['#D7C8B5', '#2E3238'],
     stockStatus: 'low_stock',
     isFeatured: true,
     isActive: true
@@ -148,6 +154,7 @@ export const initialProducts = [
     ],
     sizes: ['S', 'M', 'L', 'XL'],
     colors: ['Vintage Bone White', 'Faded Terracotta'],
+    colorHexes: ['#EDE8DC', '#BF6852'],
     stockStatus: 'ready',
     isFeatured: true,
     isActive: true
@@ -168,6 +175,7 @@ export const initialProducts = [
     ],
     sizes: ['M', 'L', 'XL'],
     colors: ['Seafoam Mist'],
+    colorHexes: ['#8BBDAE', '#4B7B70'],
     stockStatus: 'ready',
     isFeatured: false,
     isActive: true
@@ -188,6 +196,7 @@ export const initialProducts = [
     ],
     sizes: ['S', 'M', 'L', 'XL'],
     colors: ['Ocean Slate Grey'],
+    colorHexes: ['#5E7285', '#334155'],
     stockStatus: 'pre_order',
     isFeatured: false,
     isActive: true
@@ -208,6 +217,7 @@ export const initialProducts = [
     ],
     sizes: ['All Size (56-58cm)'],
     colors: ['Natural Straw'],
+    colorHexes: ['#D9C59B'],
     stockStatus: 'ready',
     isFeatured: true,
     isActive: true
@@ -228,6 +238,7 @@ export const initialProducts = [
     ],
     sizes: ['One Size (40cm x 35cm x 12cm)'],
     colors: ['Off-White Canvas & Teal'],
+    colorHexes: ['#EFECE6', '#1E6B7B'],
     stockStatus: 'ready',
     isFeatured: false,
     isActive: true
@@ -248,6 +259,7 @@ export const initialProducts = [
     ],
     sizes: ['One Size'],
     colors: ['Amber Tortoise'],
+    colorHexes: ['#A0632D', '#1A1A1A'],
     stockStatus: 'sold_out',
     isFeatured: false,
     isActive: true

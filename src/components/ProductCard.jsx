@@ -1,53 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { StockBadge } from './StockBadge';
-import { ShoppingBag, Eye } from 'lucide-react';
+import { ShoppingBag, Eye, ArrowRight } from 'lucide-react';
 
 export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
   const { lang, t } = useLanguage();
+  const [selectedImageIdx, setSelectedImageIdx] = useState(0);
 
   const title = lang === 'en' ? product.title_en : product.title_id;
+  const material = lang === 'en' ? product.material_en : product.material_id;
   const isSoldOut = product.stockStatus === 'sold_out';
 
   const formatPrice = (num) => {
     return new Intl.NumberFormat('id-ID').format(num);
   };
 
+  const categoryLabels = {
+    shirts: lang === 'en' ? 'Linen Shirts' : 'Kemeja Linen',
+    boardshorts: lang === 'en' ? 'Boardshorts' : 'Celana Pantai',
+    tees: lang === 'en' ? 'Oversized Tees' : 'Kaos Santai',
+    accessories: lang === 'en' ? 'Accessories' : 'Aksesoris'
+  };
+
   return (
     <div
       onClick={() => onSelectProduct(product)}
       style={{
-        backgroundColor: 'var(--bg-surface)',
+        backgroundColor: '#FFFFFF',
         borderRadius: 'var(--radius-md)',
         border: '1px solid var(--bg-muted)',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
         cursor: 'pointer',
-        transition: 'all var(--transition-normal)',
-        position: 'relative'
+        transition: 'all 280ms cubic-bezier(0.16, 1, 0.3, 1)',
+        position: 'relative',
+        boxShadow: 'var(--shadow-sm)'
       }}
+      className="product-card-hover"
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-4px)';
-        e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-        e.currentTarget.style.borderColor = 'var(--color-seafoam)';
+        e.currentTarget.style.transform = 'translateY(-5px)';
+        e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+        e.currentTarget.style.borderColor = 'rgba(98, 182, 168, 0.5)';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = 'none';
+        e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
         e.currentTarget.style.borderColor = 'var(--bg-muted)';
       }}
     >
-      {/* Product Image Area with 4:5 Aspect Ratio */}
+      {/* 3:4 Tall Portrait Image Area (Reference Image 4) */}
       <div style={{
         position: 'relative',
         width: '100%',
-        paddingTop: '120%', /* 4:5 Aspect Ratio approximately */
-        backgroundColor: 'var(--bg-subtle)',
+        paddingTop: '133%', /* 3:4 Tall Aspect Ratio */
+        backgroundColor: '#F3EFE8',
         overflow: 'hidden'
       }}>
         <img
-          src={product.images[0]}
+          src={product.images[selectedImageIdx] || product.images[0]}
           alt={title}
           loading="lazy"
           style={{
@@ -57,8 +68,9 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            transition: 'transform 400ms cubic-bezier(0.16, 1, 0.3, 1)'
+            transition: 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1)'
           }}
+          className="product-card-img"
           onError={(e) => {
             e.currentTarget.src = 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80';
           }}
@@ -74,7 +86,26 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
           <StockBadge status={product.stockStatus} />
         </div>
 
-        {/* Quick Sizes Pill Overlay at Bottom of Image */}
+        {/* Discount Badge if compareAtPrice exists */}
+        {product.compareAtPrice && product.compareAtPrice > product.price && (
+          <div style={{
+            position: 'absolute',
+            top: '0.65rem',
+            right: '0.65rem',
+            zIndex: 2,
+            backgroundColor: 'var(--color-accent-coral)',
+            color: '#FFFFFF',
+            fontSize: '0.6875rem',
+            fontWeight: 800,
+            padding: '0.2rem 0.5rem',
+            borderRadius: 'var(--radius-full)',
+            letterSpacing: '0.02em'
+          }}>
+            SALE
+          </div>
+        )}
+
+        {/* Sizes Pill Strip Overlay */}
         {product.sizes && product.sizes.length > 0 && (
           <div style={{
             position: 'absolute',
@@ -84,52 +115,66 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.3rem',
+            gap: '0.35rem',
             padding: '0.25rem 0.5rem',
             borderRadius: 'var(--radius-sm)',
-            backgroundColor: 'rgba(255, 255, 255, 0.88)',
+            backgroundColor: 'rgba(255, 255, 255, 0.92)',
             backdropFilter: 'blur(4px)',
             WebkitBackdropFilter: 'blur(4px)',
             fontSize: '0.6875rem',
             fontWeight: 700,
             color: 'var(--text-secondary)'
           }}>
-            {product.sizes.map((s) => (
+            {product.sizes.slice(0, 4).map((s) => (
               <span key={s} style={{ padding: '0 2px' }}>{s}</span>
             ))}
           </div>
         )}
       </div>
 
-      {/* Card Info Content */}
+      {/* Card Info Content (Reference Image 4 Layout) */}
       <div style={{
-        padding: '0.875rem 1rem 1rem',
+        padding: '1rem 1.1rem 1.15rem',
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 1,
         justifyContent: 'space-between'
       }}>
         <div>
-          {/* Category mini label */}
-          <span style={{
-            fontSize: '0.6875rem',
-            fontWeight: 600,
-            textTransform: 'uppercase',
-            letterSpacing: '0.04em',
-            color: 'var(--color-primary)'
+          {/* Category Department Tag */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '0.25rem'
           }}>
-            {product.category}
-          </span>
+            <span style={{
+              fontSize: '0.6875rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              color: 'var(--color-primary)'
+            }}>
+              {categoryLabels[product.category] || product.category}
+            </span>
 
-          {/* Title */}
+            {/* Quick stock status text */}
+            <span style={{
+              fontSize: '0.6875rem',
+              color: 'var(--text-tertiary)'
+            }}>
+              {product.stockStatus === 'ready' ? 'Siap Kirim' : ''}
+            </span>
+          </div>
+
+          {/* Product Title */}
           <h3 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '0.95rem',
+            fontSize: '0.975rem',
             fontWeight: 700,
             lineHeight: 1.35,
             color: 'var(--text-primary)',
-            marginTop: '0.2rem',
-            marginBottom: '0.5rem',
+            marginBottom: '0.35rem',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
@@ -137,16 +182,61 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
           }}>
             {title}
           </h3>
+
+          {/* Material Subtitle */}
+          <p style={{
+            fontSize: '0.75rem',
+            color: 'var(--text-tertiary)',
+            marginBottom: '0.65rem',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}>
+            {material}
+          </p>
+
+          {/* Color Swatch Dots (Reference Image 4) */}
+          {product.colorHexes && product.colorHexes.length > 0 && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              marginBottom: '0.75rem'
+            }}>
+              {product.colorHexes.map((hex, idx) => (
+                <span
+                  key={idx}
+                  style={{
+                    width: '13px',
+                    height: '13px',
+                    borderRadius: '50%',
+                    backgroundColor: hex,
+                    border: '1.5px solid #FFFFFF',
+                    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.18)',
+                    display: 'inline-block'
+                  }}
+                  title={product.colors?.[idx] || ''}
+                />
+              ))}
+              <span style={{
+                fontSize: '0.6875rem',
+                color: 'var(--text-tertiary)',
+                marginLeft: '0.2rem'
+              }}>
+                {product.colors?.length} warna
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Price & Action Row */}
+        {/* Pricing & Add-to-Cart Action */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginTop: '0.5rem',
-          paddingTop: '0.5rem',
-          borderTop: '1px dashed var(--bg-muted)'
+          paddingTop: '0.65rem',
+          borderTop: '1px solid var(--bg-muted)',
+          marginTop: '0.25rem'
         }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.35rem' }}>
@@ -154,7 +244,7 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
                 fontFamily: 'var(--font-display)',
                 fontWeight: 800,
                 fontSize: '1.05rem',
-                color: 'var(--text-primary)'
+                color: 'var(--color-primary)'
               }} className="price-nums">
                 {t('currency')} {formatPrice(product.price)}
               </span>
@@ -162,7 +252,7 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
 
             {product.compareAtPrice && (
               <span style={{
-                fontSize: '0.75rem',
+                fontSize: '0.72rem',
                 color: 'var(--text-tertiary)',
                 textDecoration: 'line-through'
               }} className="price-nums">
@@ -186,29 +276,32 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '36px',
-              height: '36px',
+              width: '34px',
+              height: '34px',
               borderRadius: 'var(--radius-full)',
-              backgroundColor: isSoldOut ? 'var(--bg-muted)' : 'var(--color-primary)',
-              color: isSoldOut ? 'var(--text-tertiary)' : 'var(--text-white)',
-              boxShadow: isSoldOut ? 'none' : 'var(--shadow-sm)',
+              backgroundColor: isSoldOut ? 'var(--bg-muted)' : 'var(--color-seafoam-light)',
+              color: isSoldOut ? 'var(--text-tertiary)' : 'var(--color-primary)',
+              border: '1px solid',
+              borderColor: isSoldOut ? 'transparent' : 'rgba(98, 182, 168, 0.4)',
               transition: 'all var(--transition-fast)'
             }}
             onMouseEnter={(e) => {
               if (!isSoldOut) {
-                e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)';
+                e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                e.currentTarget.style.color = '#FFFFFF';
                 e.currentTarget.style.transform = 'scale(1.05)';
               }
             }}
             onMouseLeave={(e) => {
               if (!isSoldOut) {
-                e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                e.currentTarget.style.backgroundColor = 'var(--color-seafoam-light)';
+                e.currentTarget.style.color = 'var(--color-primary)';
                 e.currentTarget.style.transform = 'scale(1)';
               }
             }}
             title={isSoldOut ? t('out_of_stock') : t('add_to_cart')}
           >
-            {isSoldOut ? <Eye size={16} /> : <ShoppingBag size={16} />}
+            {isSoldOut ? <Eye size={15} /> : <ShoppingBag size={15} />}
           </button>
         </div>
       </div>
