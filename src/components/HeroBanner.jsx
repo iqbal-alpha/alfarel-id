@@ -17,27 +17,27 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
   return (
     <section style={{
       position: 'relative',
-      backgroundColor: '#FFFFFF',
-      borderBottom: '1px solid var(--bg-muted)',
+      backgroundColor: '#ADD2C1', // Exact matching pastel seafoam green canvas
+      borderBottom: '1px solid rgba(19, 53, 42, 0.1)',
       overflow: 'hidden',
-      paddingTop: '2.5rem'
+      padding: '3rem 0 2rem'
     }}>
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-        {/* Seamless Wide 2-Column Split Hero (Exact Match Reference Image 1 & 2) */}
+        {/* Main 2-Column Split Hero Layout (Matching User Reference Image) */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 450px), 1fr))',
           alignItems: 'center',
-          gap: '2rem'
+          gap: '2.5rem',
+          marginBottom: '2rem'
         }}>
-          {/* Left Column: Minimalist Editorial Typography & CTAs */}
+          {/* Left Column: Typography, CTAs & Quick Search */}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            paddingBottom: '2.5rem',
-            paddingTop: '1rem',
-            maxWidth: '560px'
+            maxWidth: '560px',
+            zIndex: 2
           }}>
             {/* Season Tag - Exactly like Reference: "SUMMER 2026" */}
             <span style={{
@@ -49,55 +49,58 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
               marginBottom: '1rem',
               display: 'inline-block'
             }}>
-              SUMMER 2026
+              {t('hero_badge')}
             </span>
 
-            {/* Display Headline - High Impact & Wide */}
+            {/* Display Headline - High Impact & Bold */}
             <h1 style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.5rem, 5.5vw, 4.25rem)',
+              fontSize: 'clamp(2.4rem, 5.2vw, 4rem)',
               fontWeight: 800,
-              lineHeight: 1.08,
-              letterSpacing: '-0.035em',
-              color: 'var(--text-primary)',
+              lineHeight: 1.1,
+              letterSpacing: '-0.03em',
+              color: '#13352A',
               marginBottom: '1.25rem'
             }}>
-              Wear The{' '}
-              <span style={{ color: 'var(--color-primary)' }}>
-                Vacation Feeling
+              {t('hero_title_1')}{' '}
+              <span style={{ color: '#16535F' }}>
+                {t('hero_title_highlight')}
               </span>
             </h1>
 
             {/* Subtitle */}
             <p style={{
               fontSize: 'clamp(0.95rem, 1.8vw, 1.125rem)',
-              color: 'var(--text-secondary)',
+              color: '#224B3E',
               lineHeight: 1.65,
               marginBottom: '2rem',
-              maxWidth: '500px'
+              maxWidth: '520px'
             }}>
               {t('hero_subtitle')}
             </p>
 
-            {/* Dual Action CTAs (Reference Image 1: Primary filled + Secondary outline) */}
+            {/* Action CTAs (Reference: Vibrant Primary + Subtle Secondary) */}
             <div style={{
               display: 'flex',
               flexWrap: 'wrap',
               alignItems: 'center',
               gap: '1rem',
-              marginBottom: '2.25rem'
+              marginBottom: '2rem'
             }}>
               <button
                 onClick={onExploreClick}
                 className="btn btn-primary"
                 style={{
                   padding: '0.85rem 2rem',
-                  fontSize: '0.95rem',
-                  fontWeight: 700,
-                  borderRadius: 'var(--radius-xs)',
+                  fontSize: '0.875rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.04em',
+                  borderRadius: '6px',
                   backgroundColor: '#0284C7',
                   borderColor: '#0284C7',
-                  color: '#FFFFFF'
+                  color: '#FFFFFF',
+                  boxShadow: '0 4px 14px rgba(2, 132, 199, 0.35)',
+                  textTransform: 'uppercase'
                 }}
               >
                 <span>{t('hero_cta')}</span>
@@ -109,27 +112,31 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
                 onClick={onExploreClick}
                 className="btn btn-secondary"
                 style={{
-                  padding: '0.85rem 1.75rem',
-                  fontSize: '0.925rem',
-                  fontWeight: 600,
-                  borderRadius: 'var(--radius-xs)',
-                  borderColor: '#CBD5E1',
-                  color: 'var(--text-primary)'
+                  padding: '0.85rem 1.65rem',
+                  fontSize: '0.875rem',
+                  fontWeight: 700,
+                  borderRadius: '6px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.88)',
+                  borderColor: 'rgba(255, 255, 255, 0.95)',
+                  color: '#13352A',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
                 }}
               >
-                <MessageCircle size={16} color="var(--color-primary)" />
+                <MessageCircle size={16} color="#0284C7" />
                 <span>{t('hero_fast_order')}</span>
               </a>
             </div>
 
-            {/* Mobile / Quick Search & Filter Card (Reference Image 2) */}
+            {/* Quick Search & Filter Box */}
             <div style={{
               width: '100%',
-              backgroundColor: '#F8FAFC',
+              backgroundColor: 'rgba(255, 255, 255, 0.94)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
               borderRadius: 'var(--radius-sm)',
               padding: '1.15rem 1.25rem',
-              border: '1px solid #E2E8F0',
-              boxShadow: 'var(--shadow-xs)'
+              border: '1px solid rgba(255, 255, 255, 0.8)',
+              boxShadow: '0 8px 24px rgba(19, 53, 42, 0.08)'
             }}>
               <div style={{
                 display: 'flex',
@@ -137,7 +144,7 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
                 gap: '0.45rem',
                 fontSize: '0.78125rem',
                 fontWeight: 700,
-                color: 'var(--text-secondary)',
+                color: '#13352A',
                 marginBottom: '0.65rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em'
@@ -222,32 +229,84 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
             </div>
           </div>
 
-          {/* Right Column: Seamless Edge-to-Edge Cutout Fashion Model (Reference Image 1) */}
+          {/* Right Column: Circular Portal Breakout Composition (Exact Reference Image Match) */}
           <div style={{
             display: 'flex',
-            alignItems: 'flex-end',
+            alignItems: 'center',
             justifyContent: 'center',
             position: 'relative',
-            minHeight: '440px',
-            overflow: 'hidden'
+            minHeight: '460px'
           }}>
-            {/* The model image with NO box, NO borders, completely seamless with white canvas */}
-            <img
-              src="/images/hero-model.jpg"
-              alt="AlfaREL.ID Resort Fashion Model"
-              style={{
-                width: 'auto',
-                maxWidth: '100%',
-                maxHeight: 'clamp(420px, 50vw, 620px)',
-                objectFit: 'contain',
-                display: 'block',
-                mixBlendMode: 'multiply',
-                filter: 'drop-shadow(0 20px 30px rgba(0, 0, 0, 0.05))',
-                transform: 'scale(1.02)',
-                transformOrigin: 'bottom center'
-              }}
-              loading="eager"
-            />
+            {/* Floating Decorative Color Dots (Reference Image Details) */}
+            <div style={{
+              position: 'absolute',
+              top: '8%',
+              left: '4%',
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              backgroundColor: '#FFE3E3', // Soft pastel pink dot
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
+              zIndex: 3
+            }} />
+
+            <div style={{
+              position: 'absolute',
+              bottom: '12%',
+              left: '8%',
+              width: '15px',
+              height: '15px',
+              borderRadius: '50%',
+              backgroundColor: '#7C3AED', // Purple accent dot
+              zIndex: 3
+            }} />
+
+            <div style={{
+              position: 'absolute',
+              top: '36%',
+              right: '6%',
+              width: '13px',
+              height: '13px',
+              borderRadius: '50%',
+              backgroundColor: '#7C3AED', // Purple accent dot
+              zIndex: 3
+            }} />
+
+            <div style={{
+              position: 'absolute',
+              bottom: '22%',
+              right: '5%',
+              width: '24px',
+              height: '24px',
+              borderRadius: '50%',
+              backgroundColor: '#FFE3E3', // Soft pastel pink dot
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
+              zIndex: 3
+            }} />
+
+            {/* Circular Breakout Model Image */}
+            <div style={{
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              maxWidth: '520px'
+            }}>
+              <img
+                src="/images/hero-model-circle.jpg"
+                alt="AlfaREL.ID Resort Fashion Model"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: 'clamp(380px, 46vw, 540px)',
+                  objectFit: 'contain',
+                  display: 'block',
+                  filter: 'drop-shadow(0 16px 28px rgba(19, 53, 42, 0.12))'
+                }}
+                loading="eager"
+              />
+            </div>
           </div>
         </div>
 
@@ -257,33 +316,34 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '1.25rem',
           width: '100%',
-          padding: '2rem 0',
-          borderTop: '1px solid var(--bg-muted)'
+          paddingTop: '1.75rem',
+          borderTop: '1px solid rgba(19, 53, 42, 0.12)'
         }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.75rem',
             padding: '0.75rem 1rem',
-            backgroundColor: '#FAFAFA',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
             borderRadius: 'var(--radius-xs)',
-            border: '1px solid #E2E8F0'
+            border: '1px solid rgba(255, 255, 255, 0.95)',
+            boxShadow: '0 2px 8px rgba(19, 53, 42, 0.04)'
           }}>
             <div style={{
               width: '36px',
               height: '36px',
               borderRadius: '50%',
-              backgroundColor: 'var(--color-seafoam-light)',
+              backgroundColor: 'rgba(2, 132, 199, 0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0
             }}>
-              <Wind size={18} color="var(--color-primary)" />
+              <Wind size={18} color="#0284C7" />
             </div>
             <div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>100% Breathable Fabric</div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)' }}>Linen & katun sejuk anti gerah</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#13352A' }}>100% Breathable Fabric</div>
+              <div style={{ fontSize: '0.72rem', color: '#3A6355' }}>Linen & katun sejuk anti gerah</div>
             </div>
           </div>
 
@@ -292,25 +352,26 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
             alignItems: 'center',
             gap: '0.75rem',
             padding: '0.75rem 1rem',
-            backgroundColor: '#FAFAFA',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
             borderRadius: 'var(--radius-xs)',
-            border: '1px solid #E2E8F0'
+            border: '1px solid rgba(255, 255, 255, 0.95)',
+            boxShadow: '0 2px 8px rgba(19, 53, 42, 0.04)'
           }}>
             <div style={{
               width: '36px',
               height: '36px',
               borderRadius: '50%',
-              backgroundColor: 'var(--color-seafoam-light)',
+              backgroundColor: 'rgba(2, 132, 199, 0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0
             }}>
-              <MessageCircle size={18} color="var(--color-primary)" />
+              <MessageCircle size={18} color="#0284C7" />
             </div>
             <div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>Fast WhatsApp Checkout</div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)' }}>Tanpa registrasi & tanpa fee admin</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#13352A' }}>Fast WhatsApp Checkout</div>
+              <div style={{ fontSize: '0.72rem', color: '#3A6355' }}>Tanpa registrasi & tanpa fee admin</div>
             </div>
           </div>
 
@@ -319,25 +380,26 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
             alignItems: 'center',
             gap: '0.75rem',
             padding: '0.75rem 1rem',
-            backgroundColor: '#FAFAFA',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
             borderRadius: 'var(--radius-xs)',
-            border: '1px solid #E2E8F0'
+            border: '1px solid rgba(255, 255, 255, 0.95)',
+            boxShadow: '0 2px 8px rgba(19, 53, 42, 0.04)'
           }}>
             <div style={{
               width: '36px',
               height: '36px',
               borderRadius: '50%',
-              backgroundColor: 'var(--color-seafoam-light)',
+              backgroundColor: 'rgba(2, 132, 199, 0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0
             }}>
-              <Truck size={18} color="var(--color-primary)" />
+              <Truck size={18} color="#0284C7" />
             </div>
             <div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>Ongkir Transparan</div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)' }}>Jabodetabek 10k · Jawa 18k · Luar 30k</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#13352A' }}>Ongkir Transparan</div>
+              <div style={{ fontSize: '0.72rem', color: '#3A6355' }}>Jabodetabek 10k · Jawa 18k · Luar 30k</div>
             </div>
           </div>
         </div>
