@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { ArrowDown, MessageCircle, Sparkles, Wind, Truck, Compass, Search, ChevronRight } from 'lucide-react';
+import { ArrowDown, MessageCircle, Wind, Truck, Search, ChevronRight } from 'lucide-react';
 
 export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) => {
   const { lang, t } = useLanguage();
@@ -17,113 +17,87 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
   return (
     <section style={{
       position: 'relative',
-      padding: '3rem 0 3.5rem',
-      background: 'linear-gradient(180deg, rgba(246, 242, 235, 0.7) 0%, rgba(251, 249, 245, 1) 100%)',
+      backgroundColor: '#FFFFFF',
       borderBottom: '1px solid var(--bg-muted)',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      paddingTop: '2.5rem'
     }}>
-      {/* Subtle organic ambient atmosphere glow */}
-      <div style={{
-        position: 'absolute',
-        top: '-10%',
-        right: '-5%',
-        width: '450px',
-        height: '450px',
-        borderRadius: '50%',
-        backgroundColor: 'rgba(98, 182, 168, 0.09)',
-        filter: 'blur(80px)',
-        pointerEvents: 'none'
-      }} />
-      <div style={{
-        position: 'absolute',
-        bottom: '0',
-        left: '-5%',
-        width: '320px',
-        height: '320px',
-        borderRadius: '50%',
-        backgroundColor: 'rgba(231, 101, 80, 0.05)',
-        filter: 'blur(70px)',
-        pointerEvents: 'none'
-      }} />
-
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-        {/* Main 2-Column Split Hero Layout (Reference Image 1 & 2) */}
+        {/* Seamless Wide 2-Column Split Hero (Exact Match Reference Image 1 & 2) */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
           alignItems: 'center',
-          gap: '2.5rem',
-          marginBottom: '3rem'
+          gap: '2rem'
         }}>
-          {/* Left Column: Copy & CTAs & Quick Filter */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            {/* Top Season Badge */}
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-              padding: '0.35rem 0.95rem',
-              borderRadius: 'var(--radius-full)',
-              backgroundColor: 'var(--color-seafoam-light)',
-              color: 'var(--color-primary)',
-              fontSize: '0.78125rem',
-              fontWeight: 700,
-              letterSpacing: '0.06em',
+          {/* Left Column: Minimalist Editorial Typography & CTAs */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            paddingBottom: '2.5rem',
+            paddingTop: '1rem',
+            maxWidth: '560px'
+          }}>
+            {/* Season Tag - Exactly like Reference: "SUMMER 2026" */}
+            <span style={{
+              color: '#0284C7',
+              fontSize: '0.8125rem',
+              fontWeight: 800,
+              letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              marginBottom: '1.25rem',
-              border: '1px solid rgba(98, 182, 168, 0.3)'
+              marginBottom: '1rem',
+              display: 'inline-block'
             }}>
-              <Compass size={14} color="var(--color-primary)" />
-              <span>{t('hero_badge')}</span>
-            </div>
+              SUMMER 2026
+            </span>
 
-            {/* Display Headline */}
+            {/* Display Headline - High Impact & Wide */}
             <h1 style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.5rem, 5.2vw, 4.25rem)',
+              fontSize: 'clamp(2.5rem, 5.5vw, 4.25rem)',
               fontWeight: 800,
-              lineHeight: 1.06,
+              lineHeight: 1.08,
               letterSpacing: '-0.035em',
               color: 'var(--text-primary)',
-              marginBottom: '1.15rem'
+              marginBottom: '1.25rem'
             }}>
-              {t('hero_title_1')}{' '}
-              <span style={{
-                color: 'var(--color-primary)',
-                fontStyle: 'italic',
-                fontWeight: 800
-              }}>
-                {t('hero_title_highlight')}
+              Wear The{' '}
+              <span style={{ color: 'var(--color-primary)' }}>
+                Vacation Feeling
               </span>
             </h1>
 
             {/* Subtitle */}
             <p style={{
-              fontSize: 'clamp(0.95rem, 2vw, 1.125rem)',
+              fontSize: 'clamp(0.95rem, 1.8vw, 1.125rem)',
               color: 'var(--text-secondary)',
               lineHeight: 1.65,
-              maxWidth: '560px',
-              marginBottom: '1.75rem'
+              marginBottom: '2rem',
+              maxWidth: '500px'
             }}>
               {t('hero_subtitle')}
             </p>
 
-            {/* Action CTA Buttons */}
+            {/* Dual Action CTAs (Reference Image 1: Primary filled + Secondary outline) */}
             <div style={{
               display: 'flex',
               flexWrap: 'wrap',
               alignItems: 'center',
-              gap: '0.85rem',
-              marginBottom: '2rem',
-              width: '100%'
+              gap: '1rem',
+              marginBottom: '2.25rem'
             }}>
               <button
                 onClick={onExploreClick}
                 className="btn btn-primary"
                 style={{
-                  padding: '0.85rem 1.85rem',
+                  padding: '0.85rem 2rem',
                   fontSize: '0.95rem',
-                  borderRadius: 'var(--radius-full)'
+                  fontWeight: 700,
+                  borderRadius: 'var(--radius-xs)',
+                  backgroundColor: '#0284C7',
+                  borderColor: '#0284C7',
+                  color: '#FFFFFF'
                 }}
               >
                 <span>{t('hero_cta')}</span>
@@ -135,9 +109,12 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
                 onClick={onExploreClick}
                 className="btn btn-secondary"
                 style={{
-                  padding: '0.85rem 1.6rem',
+                  padding: '0.85rem 1.75rem',
                   fontSize: '0.925rem',
-                  borderRadius: 'var(--radius-full)'
+                  fontWeight: 600,
+                  borderRadius: 'var(--radius-xs)',
+                  borderColor: '#CBD5E1',
+                  color: 'var(--text-primary)'
                 }}
               >
                 <MessageCircle size={16} color="var(--color-primary)" />
@@ -145,26 +122,27 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
               </a>
             </div>
 
-            {/* Integrated Quick Search & Filter Card (Reference Image 2) */}
+            {/* Mobile / Quick Search & Filter Card (Reference Image 2) */}
             <div style={{
               width: '100%',
-              maxWidth: '540px',
-              backgroundColor: '#FFFFFF',
-              borderRadius: 'var(--radius-md)',
+              backgroundColor: '#F8FAFC',
+              borderRadius: 'var(--radius-sm)',
               padding: '1.15rem 1.25rem',
-              boxShadow: 'var(--shadow-md)',
-              border: '1px solid rgba(0, 0, 0, 0.06)'
+              border: '1px solid #E2E8F0',
+              boxShadow: 'var(--shadow-xs)'
             }}>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                fontSize: '0.8125rem',
+                gap: '0.45rem',
+                fontSize: '0.78125rem',
                 fontWeight: 700,
-                color: 'var(--text-primary)',
-                marginBottom: '0.75rem'
+                color: 'var(--text-secondary)',
+                marginBottom: '0.65rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em'
               }}>
-                <Search size={15} color="var(--color-primary)" />
+                <Search size={14} color="#0284C7" />
                 <span>Pencarian Cepat Pakaian Pantai</span>
               </div>
 
@@ -179,50 +157,46 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
                   gap: '0.65rem'
                 }}>
                   {/* Search Input */}
-                  <div style={{ position: 'relative' }}>
-                    <input
-                      type="text"
-                      value={localQuery}
-                      onChange={(e) => setLocalQuery(e.target.value)}
-                      placeholder={t('quick_search_placeholder')}
-                      style={{
-                        width: '100%',
-                        padding: '0.65rem 0.85rem',
-                        fontSize: '0.875rem',
-                        borderRadius: 'var(--radius-sm)',
-                        border: '1px solid var(--bg-muted)',
-                        backgroundColor: 'var(--bg-subtle)',
-                        color: 'var(--text-primary)',
-                        outline: 'none'
-                      }}
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    value={localQuery}
+                    onChange={(e) => setLocalQuery(e.target.value)}
+                    placeholder={t('quick_search_placeholder')}
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.85rem',
+                      fontSize: '0.875rem',
+                      borderRadius: 'var(--radius-xs)',
+                      border: '1px solid #CBD5E1',
+                      backgroundColor: '#FFFFFF',
+                      color: 'var(--text-primary)',
+                      outline: 'none'
+                    }}
+                  />
 
-                  {/* Category Select Dropdown */}
-                  <div>
-                    <select
-                      value={selectedCat}
-                      onChange={(e) => setSelectedCat(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '0.65rem 0.85rem',
-                        fontSize: '0.875rem',
-                        borderRadius: 'var(--radius-sm)',
-                        border: '1px solid var(--bg-muted)',
-                        backgroundColor: 'var(--bg-subtle)',
-                        color: 'var(--text-primary)',
-                        outline: 'none',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      <option value="all">Semua Kategori</option>
-                      {categories.filter(c => c.id !== 'all').map(cat => (
-                        <option key={cat.id} value={cat.id}>
-                          {lang === 'en' ? cat.name_en : cat.name_id}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  {/* Category Dropdown */}
+                  <select
+                    value={selectedCat}
+                    onChange={(e) => setSelectedCat(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.85rem',
+                      fontSize: '0.875rem',
+                      borderRadius: 'var(--radius-xs)',
+                      border: '1px solid #CBD5E1',
+                      backgroundColor: '#FFFFFF',
+                      color: 'var(--text-primary)',
+                      outline: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <option value="all">Semua Kategori</option>
+                    {categories.filter(c => c.id !== 'all').map(cat => (
+                      <option key={cat.id} value={cat.id}>
+                        {lang === 'en' ? cat.name_en : cat.name_id}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <button
@@ -230,12 +204,14 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
                   className="btn btn-primary"
                   style={{
                     width: '100%',
-                    padding: '0.75rem 1rem',
+                    padding: '0.7rem 1rem',
                     fontSize: '0.875rem',
                     fontWeight: 700,
-                    borderRadius: 'var(--radius-sm)',
+                    borderRadius: 'var(--radius-xs)',
                     justifyContent: 'center',
-                    gap: '0.5rem'
+                    gap: '0.5rem',
+                    backgroundColor: '#0284C7',
+                    borderColor: '#0284C7'
                   }}
                 >
                   <Search size={15} />
@@ -246,88 +222,32 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
             </div>
           </div>
 
-          {/* Right Column: High-Fashion Coastal Lifestyle Model (Reference Image 1) */}
+          {/* Right Column: Seamless Edge-to-Edge Cutout Fashion Model (Reference Image 1) */}
           <div style={{
             display: 'flex',
+            alignItems: 'flex-end',
             justifyContent: 'center',
-            position: 'relative'
+            position: 'relative',
+            minHeight: '440px',
+            overflow: 'hidden'
           }}>
-            {/* Visual Framing Container */}
-            <div style={{
-              position: 'relative',
-              width: '100%',
-              maxWidth: '460px',
-              borderRadius: 'var(--radius-lg)',
-              overflow: 'hidden',
-              boxShadow: 'var(--shadow-xl)',
-              backgroundColor: '#EDE8DF',
-              border: '1px solid rgba(255, 255, 255, 0.8)'
-            }}>
-              {/* Lifestyle Image */}
-              <img
-                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80"
-                alt="AlfaREL Coastal Apparel Model"
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  aspectRatio: '4 / 5',
-                  objectFit: 'cover',
-                  display: 'block'
-                }}
-                loading="eager"
-              />
-
-              {/* Floating Bottom Badge */}
-              <div style={{
-                position: 'absolute',
-                bottom: '1.25rem',
-                left: '1.25rem',
-                right: '1.25rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.92)',
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
-                borderRadius: 'var(--radius-md)',
-                padding: '0.85rem 1.15rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.6)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                  <div style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    backgroundColor: 'var(--color-seafoam-light)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'var(--color-primary)'
-                  }}>
-                    <Sparkles size={16} />
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '0.78125rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                      Summer Resort 2026 Drop
-                    </div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
-                      100% Breathable Organic Cotton & Linen
-                    </div>
-                  </div>
-                </div>
-
-                <span style={{
-                  fontSize: '0.7rem',
-                  fontWeight: 800,
-                  color: 'var(--color-primary)',
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase'
-                }}>
-                  New
-                </span>
-              </div>
-            </div>
+            {/* The model image with NO box, NO borders, completely seamless with white canvas */}
+            <img
+              src="/images/hero-model.jpg"
+              alt="AlfaREL.ID Resort Fashion Model"
+              style={{
+                width: 'auto',
+                maxWidth: '100%',
+                maxHeight: 'clamp(420px, 50vw, 620px)',
+                objectFit: 'contain',
+                display: 'block',
+                mixBlendMode: 'multiply',
+                filter: 'drop-shadow(0 20px 30px rgba(0, 0, 0, 0.05))',
+                transform: 'scale(1.02)',
+                transformOrigin: 'bottom center'
+              }}
+              loading="eager"
+            />
           </div>
         </div>
 
@@ -337,7 +257,7 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '1.25rem',
           width: '100%',
-          paddingTop: '2rem',
+          padding: '2rem 0',
           borderTop: '1px solid var(--bg-muted)'
         }}>
           <div style={{
@@ -345,9 +265,9 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
             alignItems: 'center',
             gap: '0.75rem',
             padding: '0.75rem 1rem',
-            backgroundColor: '#FFFFFF',
-            borderRadius: 'var(--radius-sm)',
-            border: '1px solid var(--bg-muted)'
+            backgroundColor: '#FAFAFA',
+            borderRadius: 'var(--radius-xs)',
+            border: '1px solid #E2E8F0'
           }}>
             <div style={{
               width: '36px',
@@ -372,9 +292,9 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
             alignItems: 'center',
             gap: '0.75rem',
             padding: '0.75rem 1rem',
-            backgroundColor: '#FFFFFF',
-            borderRadius: 'var(--radius-sm)',
-            border: '1px solid var(--bg-muted)'
+            backgroundColor: '#FAFAFA',
+            borderRadius: 'var(--radius-xs)',
+            border: '1px solid #E2E8F0'
           }}>
             <div style={{
               width: '36px',
@@ -399,9 +319,9 @@ export const HeroBanner = ({ onExploreClick, onQuickSearch, categories = [] }) =
             alignItems: 'center',
             gap: '0.75rem',
             padding: '0.75rem 1rem',
-            backgroundColor: '#FFFFFF',
-            borderRadius: 'var(--radius-sm)',
-            border: '1px solid var(--bg-muted)'
+            backgroundColor: '#FAFAFA',
+            borderRadius: 'var(--radius-xs)',
+            border: '1px solid #E2E8F0'
           }}>
             <div style={{
               width: '36px',
