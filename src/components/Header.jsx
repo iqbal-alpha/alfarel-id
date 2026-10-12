@@ -2,6 +2,7 @@ import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useCart } from '../context/CartContext';
 import { ShoppingBag, Search, ShieldCheck } from 'lucide-react';
+import { Logo } from './Logo';
 
 export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
   const { t } = useLanguage();
@@ -24,37 +25,9 @@ export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
         justifyContent: 'space-between',
         height: '4rem'
       }}>
-        {/* Brand Logo */}
-        <a href="#catalog" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}>
-          <span style={{ fontSize: '1.4rem' }}>🌴</span>
-          <div style={{ display: 'flex', alignItems: 'baseline' }}>
-            <span style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 800,
-              fontSize: '1.35rem',
-              letterSpacing: '-0.02em',
-              color: 'var(--text-primary)'
-            }}>
-              AlfaREL
-            </span>
-            <span style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 800,
-              fontSize: '1.1rem',
-              color: 'var(--color-primary)'
-            }}>
-              .ID
-            </span>
-            <span style={{
-              display: 'inline-block',
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--color-accent-coral)',
-              marginLeft: '2px',
-              marginBottom: '2px'
-            }} />
-          </div>
+        {/* Brand Logo Lockup */}
+        <a href="#catalog" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
+          <Logo />
         </a>
 
         {/* Right Action Icons */}

@@ -305,8 +305,16 @@ export const AdminPanel = ({
               }}>
                 {t('admin_title')}
               </h1>
-              <span style={{ fontSize: '0.75rem', color: 'var(--badge-ready)', fontWeight: 600 }}>
-                ● Terotentikasi (Akses CRUD Aktif)
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                fontSize: '0.75rem',
+                color: 'var(--badge-ready)',
+                fontWeight: 600
+              }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: 'var(--badge-ready)' }} />
+                Terotentikasi (Akses CRUD Aktif)
               </span>
             </div>
           </div>

@@ -63,21 +63,22 @@ export const CheckoutModal = ({ storeSettings }) => {
       return `${index + 1}. ${itemTitle}${colorText}\n   • Ukuran: ${item.size}\n   • Qty: ${item.quantity} pcs @ Rp ${formatPrice(item.price)} = Rp ${formatPrice(item.price * item.quantity)}`;
     }).join('\n');
 
-    // Build the WhatsApp message template
-    const rawMessage = `🌴 *HALO ALFAREL.ID, SAYA MAU PESAN APPAREL INI* 🌊
-------------------------------------------
+    // Build clean professional WhatsApp message template
+    const rawMessage = `*PESANAN BARU — ALFAREL.ID*
 ID Pesanan: #${orderId}
-
-📋 *DAFTAR ITEM BELANJA:*
+------------------------------------------
+*DAFTAR ITEM BELANJA:*
 ${itemsLines}
 
 ------------------------------------------
-📦 *Total Item:* ${items.reduce((s, i) => s + i.quantity, 0)} pcs
-💰 *Subtotal Produk:* Rp ${formatPrice(subtotal)}
-🚚 *Ongkos Kirim (${shippingRateLabels[shippingZone]}):* Rp ${formatPrice(currentShippingCost)}
-💳 *TOTAL PEMBAYARAN:* Rp ${formatPrice(grandTotal)}
+*RINGKASAN PEMBAYARAN:*
+• Total Item: ${items.reduce((s, i) => s + i.quantity, 0)} pcs
+• Subtotal: Rp ${formatPrice(subtotal)}
+• Ongkos Kirim (${shippingRateLabels[shippingZone]}): Rp ${formatPrice(currentShippingCost)}
+• *TOTAL TRANSFER: Rp ${formatPrice(grandTotal)}*
 
-📍 *DATA PENGIRIMAN:*
+------------------------------------------
+*DATA PENGIRIMAN:*
 • Nama Penerima: ${name}
 • No. WhatsApp: ${phone}
 • Alamat: ${address}
@@ -85,7 +86,7 @@ ${itemsLines}
 • Ekspedisi Favorit: ${courier}
 • Catatan: ${additionalNote || '-'}
 
-Mohon konfirmasi pesanan dan nomor rekening / QRIS pembayaran ya kak. Terima kasih! 🤙`;
+Mohon konfirmasi ketersediaan stok serta nomor rekening / QRIS pembayaran. Terima kasih.`;
 
     const cleanWaNumber = (storeSettings?.whatsappNumber || '6281234567890').replace(/\D/g, '');
     const waUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(rawMessage)}`;

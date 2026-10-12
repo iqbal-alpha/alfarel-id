@@ -99,7 +99,19 @@ export const CartDrawer = () => {
               padding: '4rem 1rem',
               gap: '1rem'
             }}>
-              <span style={{ fontSize: '3rem' }}>🏖️</span>
+              <div style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                backgroundColor: 'var(--color-sand)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--color-primary)',
+                marginBottom: '0.25rem'
+              }}>
+                <ShoppingBag size={28} strokeWidth={1.5} />
+              </div>
               <h3 style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: '1.1rem',
@@ -368,12 +380,13 @@ export const CartDrawer = () => {
             </button>
 
             <p style={{
-              fontSize: '0.7rem',
-              color: 'var(--text-tertiary)',
+              fontSize: '0.72rem',
+              color: 'var(--text-secondary)',
               textAlign: 'center',
-              marginTop: '0.6rem'
+              marginTop: '0.65rem',
+              letterSpacing: '0.01em'
             }}>
-              🌴 Cepat & aman tanpa biaya admin marketplace
+              Transaksi langsung ke WhatsApp resmi · Bebas biaya admin marketplace
             </p>
           </div>
         )}

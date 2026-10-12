@@ -257,8 +257,8 @@ export const initialProducts = [
 export const initialStoreSettings = {
   storeName: 'AlfaREL.ID Store',
   whatsappNumber: '6281234567890',
-  announcement_id: '🌴 Promo Musim Panas: Diskon hingga 30% untuk koleksi pantai! 🌊',
-  announcement_en: '🌴 Summer Breeze Promo: Up to 30% off on all coastal apparel! 🌊',
+  announcement_id: 'PROMO SPESIAL: GRATIS ONGKIR MINIMAL BELANJA RP 250.000 KE SELURUH INDONESIA',
+  announcement_en: 'SPECIAL OFFER: COMPLIMENTARY SHIPPING OVER IDR 250,000 NATIONWIDE',
   isStoreOpen: true,
   adminPin: '1234' // Demo PIN
 };

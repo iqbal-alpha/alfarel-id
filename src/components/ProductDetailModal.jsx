@@ -362,7 +362,7 @@ export const ProductDetailModal = ({ product, onClose }) => {
               {isAdded ? (
                 <>
                   <Check size={18} />
-                  <span>Ditambahkan! 🤙</span>
+                  <span>{t('added_to_cart')}</span>
                 </>
               ) : isSoldOut ? (
                 <span>{t('out_of_stock')}</span>

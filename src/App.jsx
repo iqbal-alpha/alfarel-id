@@ -14,8 +14,9 @@ import { FloatingCartButton } from './components/FloatingCartButton';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AdminPanel } from './components/AdminPanel';
+import { Logo } from './components/Logo';
 
-import { Sparkles, MessageCircle, Heart, Shield, RefreshCw } from 'lucide-react';
+import { Sparkles, MessageCircle, Heart, Shield, RefreshCw, Search, Check } from 'lucide-react';
 
 export function MainStore() {
   const { lang, t } = useLanguage();
@@ -201,13 +202,25 @@ export function MainStore() {
                   borderRadius: 'var(--radius-lg)',
                   border: '1px solid var(--bg-muted)'
                 }}>
-                  <span style={{ fontSize: '3rem' }}>🔍</span>
+                  <div style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--bg-subtle)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto',
+                    color: 'var(--text-tertiary)'
+                  }}>
+                    <Search size={26} strokeWidth={1.5} />
+                  </div>
                   <h3 style={{
                     fontFamily: 'var(--font-display)',
                     fontSize: '1.25rem',
                     fontWeight: 700,
                     color: 'var(--text-primary)',
-                    marginTop: '1rem',
+                    marginTop: '1.25rem',
                     marginBottom: '0.5rem'
                   }}>
                     {t('search_no_results')}
@@ -270,16 +283,8 @@ export function MainStore() {
               }}>
                 {/* Brand Column */}
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
-                    <span style={{ fontSize: '1.5rem' }}>🌴</span>
-                    <span style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '1.4rem',
-                      fontWeight: 800,
-                      color: 'var(--text-white)'
-                    }}>
-                      AlfaREL.ID
-                    </span>
+                  <div style={{ marginBottom: '1.25rem' }}>
+                    <Logo variant="light" size="large" />
                   </div>
                   <p style={{ fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.6, maxWidth: '340px' }}>
                     {t('footer_about')}
@@ -323,11 +328,23 @@ export function MainStore() {
                   }}>
                     Jaminan Belanja
                   </h4>
-                  <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.7)' }}>
-                    <li>✓ 100% Foto Produk Asli & Bahan Berkualitas</li>
-                    <li>✓ Fast Checkout Tanpa Biaya Tambahan</li>
-                    <li>✓ Pilihan Ekspedisi Nasional Cepat & Terpercaya</li>
-                    <li>✓ Tukar Ukuran Fleksibel via Chat WhatsApp</li>
+                  <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.7)' }}>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Check size={14} color="var(--color-seafoam)" style={{ flexShrink: 0 }} />
+                      <span>100% Foto Produk Asli & Bahan Berkualitas</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Check size={14} color="var(--color-seafoam)" style={{ flexShrink: 0 }} />
+                      <span>Fast Checkout Tanpa Biaya Tambahan</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Check size={14} color="var(--color-seafoam)" style={{ flexShrink: 0 }} />
+                      <span>Pilihan Ekspedisi Nasional Cepat & Terpercaya</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Check size={14} color="var(--color-seafoam)" style={{ flexShrink: 0 }} />
+                      <span>Tukar Ukuran Fleksibel via Chat WhatsApp</span>
+                    </li>
                   </ul>
                 </div>
               </div>
