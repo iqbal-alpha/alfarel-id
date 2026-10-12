@@ -1,0 +1,13 @@
+﻿{
+    "description":  "The Anti-Slop Frontend Framework for AI Agents. Upgrade AI-built interfaces with stronger layout, typography, motion, spacing, and tailored design aesthetics (brutalist, minimalist, soft, brandkit, redesign, image-to-code)",
+    "version":  "1.0.0",
+    "category":  "Frontend Design \u0026 UX",
+    "author":  {
+                   "name":  "leonxlnx"
+               },
+    "name":  "taste-skill",
+    "homepage":  "https://github.com/leonxlnx/taste-skill",
+    "repository":  "https://github.com/leonxlnx/taste-skill",
+    "license":  "MIT",
+    "displayName":  "Taste Skill"
+}
