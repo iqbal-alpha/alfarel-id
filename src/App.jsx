@@ -39,6 +39,21 @@ export function MainStore() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isAdminView, setIsAdminView] = useState(false);
 
+  React.useEffect(() => {
+    if (window.location.hash === '#admin' || window.location.pathname === '/admin') {
+      setIsAdminView(true);
+    }
+    const handleHash = () => {
+      if (window.location.hash === '#admin') {
+        setIsAdminView(true);
+      } else if (window.location.hash === '') {
+        setIsAdminView(false);
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
   const searchInputRef = useRef(null);
 
   // Filter products by category, active status, and search query
@@ -119,7 +134,12 @@ export function MainStore() {
           categories={categories}
           storeSettings={storeSettings}
           setStoreSettings={setStoreSettings}
-          onClose={() => setIsAdminView(false)}
+          onClose={() => {
+            setIsAdminView(false);
+            if (window.location.hash === '#admin') {
+              window.history.pushState(null, '', window.location.pathname);
+            }
+          }}
         />
       ) : (
         <main style={{ flex: 1 }}>
