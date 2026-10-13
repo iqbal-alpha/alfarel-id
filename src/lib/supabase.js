@@ -12,7 +12,7 @@ export const supabase = isSupabaseConfigured()
   : null;
 
 // ==============================================================================
-// Database Helper Services with Graceful Offline / Fallback Support
+// Database Helper Services with Isolated "alfarel_*" Namespace
 // ==============================================================================
 
 /**
@@ -21,7 +21,7 @@ export const supabase = isSupabaseConfigured()
 export async function getCategories() {
   if (!isSupabaseConfigured()) return null;
   const { data, error } = await supabase
-    .from('categories')
+    .from('alfarel_categories')
     .select('*')
     .order('sort_order', { ascending: true });
   if (error) throw error;
@@ -34,9 +34,9 @@ export async function getCategories() {
 export async function getProducts(options = {}) {
   if (!isSupabaseConfigured()) return null;
 
-  let query = supabase.from('products').select(`
+  let query = supabase.from('alfarel_products').select(`
     *,
-    categories (slug, name_id, name_en)
+    alfarel_categories (slug, name_id, name_en)
   `);
 
   if (!options.includeInactive) {
@@ -44,7 +44,7 @@ export async function getProducts(options = {}) {
   }
 
   if (options.categorySlug && options.categorySlug !== 'all') {
-    query = query.eq('categories.slug', options.categorySlug);
+    query = query.eq('alfarel_categories.slug', options.categorySlug);
   }
 
   query = query.order('sort_order', { ascending: true });
@@ -60,7 +60,7 @@ export async function getProducts(options = {}) {
 export async function createProduct(productData) {
   if (!isSupabaseConfigured()) return null;
   const { data, error } = await supabase
-    .from('products')
+    .from('alfarel_products')
     .insert([productData])
     .select()
     .single();
@@ -74,7 +74,7 @@ export async function createProduct(productData) {
 export async function updateProduct(id, updates) {
   if (!isSupabaseConfigured()) return null;
   const { data, error } = await supabase
-    .from('products')
+    .from('alfarel_products')
     .update(updates)
     .eq('id', id)
     .select()
@@ -89,7 +89,7 @@ export async function updateProduct(id, updates) {
 export async function deleteProduct(id) {
   if (!isSupabaseConfigured()) return null;
   const { error } = await supabase
-    .from('products')
+    .from('alfarel_products')
     .delete()
     .eq('id', id);
   if (error) throw error;
@@ -102,7 +102,7 @@ export async function deleteProduct(id) {
 export async function getStoreSettings() {
   if (!isSupabaseConfigured()) return null;
   const { data, error } = await supabase
-    .from('store_settings')
+    .from('alfarel_store_settings')
     .select('*')
     .eq('id', 1)
     .single();
@@ -116,7 +116,7 @@ export async function getStoreSettings() {
 export async function updateStoreSettings(updates) {
   if (!isSupabaseConfigured()) return null;
   const { data, error } = await supabase
-    .from('store_settings')
+    .from('alfarel_store_settings')
     .update(updates)
     .eq('id', 1)
     .select()
@@ -131,7 +131,7 @@ export async function updateStoreSettings(updates) {
 export async function logOrder(orderData) {
   if (!isSupabaseConfigured()) return null;
   const { data, error } = await supabase
-    .from('order_logs')
+    .from('alfarel_order_logs')
     .insert([orderData])
     .select()
     .single();

@@ -1,11 +1,10 @@
 -- ==============================================================================
 -- AlfaREL.ID Store — Initial Seed Data (Tahap 3)
--- Created: 2026-10-13
--- Contains: 4 Categories, Store Settings, and 12 Curated Beach Apparel Products
+-- Target Tables: alfarel_* (Safe isolated namespace)
 -- ==============================================================================
 
 -- 1. Seed Categories
-INSERT INTO categories (slug, name_id, name_en, sort_order)
+INSERT INTO alfarel_categories (slug, name_id, name_en, sort_order)
 VALUES
     ('shirts', 'Linen Beach Shirts', 'Linen Beach Shirts', 1),
     ('boardshorts', 'Boardshorts & Trunks', 'Boardshorts & Trunks', 2),
@@ -17,7 +16,7 @@ SET name_id = EXCLUDED.name_id,
     sort_order = EXCLUDED.sort_order;
 
 -- 2. Seed Store Settings
-INSERT INTO store_settings (id, store_name, whatsapp_number, announcement_id, announcement_en, is_store_open, admin_pin_hash)
+INSERT INTO alfarel_store_settings (id, store_name, whatsapp_number, announcement_id, announcement_en, is_store_open, admin_pin_hash)
 VALUES (
     1,
     'AlfaREL.ID Store',
@@ -35,7 +34,7 @@ SET store_name = EXCLUDED.store_name,
     is_store_open = EXCLUDED.is_store_open;
 
 -- 3. Seed Products (12 Curated Beach Resort Apparel Items)
-INSERT INTO products (
+INSERT INTO alfarel_products (
     slug,
     category_id,
     title_id,
@@ -58,7 +57,7 @@ VALUES
     -- 1. Bali Breeze Shirt
     (
         'bali-breeze-camp-collar-linen-shirt',
-        (SELECT id FROM categories WHERE slug = 'shirts'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'shirts'),
         'Bali Breeze Camp Collar Linen Shirt',
         'Bali Breeze Camp Collar Linen Shirt',
         'Open Cuban collar shirt crafted from 100% garment-washed natural linen. Incredibly breezy and breathable under coastal sunshine with an effortless relaxed drape.',
@@ -78,7 +77,7 @@ VALUES
     -- 2. Amalfi Striped Shirt
     (
         'amalfi-coast-striped-resort-shirt',
-        (SELECT id FROM categories WHERE slug = 'shirts'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'shirts'),
         'Amalfi Coast Striped Resort Shirt',
         'Amalfi Coast Striped Resort Shirt',
         'Classic Mediterranean vertical stripes combining deep ocean navy with sunlit white. Crafted from cooling, wrinkle-resistant premium breathable rayon twill.',
@@ -98,7 +97,7 @@ VALUES
     -- 3. Uluwatu Terracotta Camp Shirt
     (
         'uluwatu-sunset-terracotta-camp-shirt',
-        (SELECT id FROM categories WHERE slug = 'shirts'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'shirts'),
         'Uluwatu Sunset Terracotta Camp Shirt',
         'Uluwatu Sunset Terracotta Camp Shirt',
         'Beach camp shirt featuring a warm sunset terracotta palette with subtle tropical botanical prints. Ideal for golden hour seaside dining.',
@@ -118,7 +117,7 @@ VALUES
     -- 4. Canggu Retro 4-Way Stretch Boardshort
     (
         'canggu-retro-4-way-stretch-boardshort',
-        (SELECT id FROM categories WHERE slug = 'boardshorts'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'boardshorts'),
         'Canggu Retro 4-Way Stretch Boardshort',
         'Canggu Retro 4-Way Stretch Boardshort',
         'Quick-dry beach boardshorts with 4-way stretch flex. Features a rear pocket with mesh drainage grommet and reinforced nautical drawcord.',
@@ -138,7 +137,7 @@ VALUES
     -- 5. Biarritz Wave Runner Boardshort
     (
         'biarritz-wave-runner-boardshort',
-        (SELECT id FROM categories WHERE slug = 'boardshorts'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'boardshorts'),
         'Biarritz Wave Runner Boardshort',
         'Biarritz Wave Runner Boardshort',
         '15-inch outseam casual boardshorts in deep marine navy with retro white piping. Equally comfortable for ocean dips or beach club lounging.',
@@ -158,7 +157,7 @@ VALUES
     -- 6. Sanur Sun-Bleached Linen Easy Shorts
     (
         'sanur-sun-bleached-linen-easy-shorts',
-        (SELECT id FROM categories WHERE slug = 'boardshorts'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'boardshorts'),
         'Sanur Sun-Bleached Linen Easy Shorts',
         'Sanur Sun-Bleached Linen Easy Shorts',
         'Easy shorts tailored from softened linen with a flexible elastic waistband. Deep side pockets and a distinctive natural textural weave for seaside chill.',
@@ -178,7 +177,7 @@ VALUES
     -- 7. Salty Days Heavyweight Relaxed Tee
     (
         'salty-days-heavyweight-relaxed-tee',
-        (SELECT id FROM categories WHERE slug = 'tees'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'tees'),
         'Salty Days Heavyweight Relaxed Tee',
         'Salty Days Heavyweight Relaxed Tee',
         '240 GSM heavyweight oversized tee with a relaxed coastal streetwear silhouette. Substantial yet airy feel crafted from 100% premium combed cotton.',
@@ -198,7 +197,7 @@ VALUES
     -- 8. Palma Sunset Pocket Graphic Tee
     (
         'palma-sunset-pocket-graphic-tee',
-        (SELECT id FROM categories WHERE slug = 'tees'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'tees'),
         'Palma Sunset Pocket Graphic Tee',
         'Palma Sunset Pocket Graphic Tee',
         'Chest pocket t-shirt featuring minimal palm silhouette graphics on the back. Soft water-based discharge print seamlessly embedded in the fabric.',
@@ -218,7 +217,7 @@ VALUES
     -- 9. Coastline Oversized Wave Tee
     (
         'coastline-oversized-wave-tee',
-        (SELECT id FROM categories WHERE slug = 'tees'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'tees'),
         'Coastline Oversized Wave Tee',
         'Coastline Oversized Wave Tee',
         'Unique enzyme-washed t-shirt with wave-washed subtle marbling. Laid-back vintage aesthetic tailored for casual coastal styling.',
@@ -238,7 +237,7 @@ VALUES
     -- 10. Raffia Handwoven Beach Bucket Hat
     (
         'raffia-handwoven-beach-bucket-hat',
-        (SELECT id FROM categories WHERE slug = 'accessories'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'accessories'),
         'Raffia Handwoven Beach Bucket Hat',
         'Raffia Handwoven Beach Bucket Hat',
         'Handcrafted natural raffia fiber bucket hat with a protective sun brim. Lightweight, crushable and packable for vacation luggage.',
@@ -258,7 +257,7 @@ VALUES
     -- 11. Sunkissed Canvas Coastal Tote Bag
     (
         'sunkissed-canvas-coastal-tote-bag',
-        (SELECT id FROM categories WHERE slug = 'accessories'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'accessories'),
         'Sunkissed Canvas Coastal Tote Bag',
         'Sunkissed Canvas Coastal Tote Bag',
         'Heavyweight 14 oz organic cotton canvas tote bag with a water-resistant interior lining. Spacious enough for beach towels, sunglasses, and essentials.',
@@ -278,7 +277,7 @@ VALUES
     -- 12. Amber Horizon Polarized Beach Sunglasses
     (
         'amber-horizon-polarized-beach-sunglasses',
-        (SELECT id FROM categories WHERE slug = 'accessories'),
+        (SELECT id FROM alfarel_categories WHERE slug = 'accessories'),
         'Amber Horizon Polarized Beach Sunglasses',
         'Amber Horizon Polarized Beach Sunglasses',
         'Amber tortoise bio-acetate sunglasses equipped with polarized UV400 glare-reduction lenses for coastal sunlight.',
