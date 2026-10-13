@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useCart } from '../context/CartContext';
-import { ShoppingBag, Search, ShieldCheck, ArrowRight } from 'lucide-react';
+import { ShoppingBag, Search, ShieldCheck, ArrowRight, Menu, X } from 'lucide-react';
 
 export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
   const { t } = useLanguage();
   const { totalItems = 0, setIsCartOpen } = useCart();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navLinks = [
+    { label: 'PRODUCTS', href: '#featured-products' },
+    { label: 'COLLECTIONS', href: '#top-collection' },
+    { label: 'ABOUT', href: '#about-section' },
+    { label: 'CURATIONS', href: '#curations-section' },
+    { label: 'CATALOG', href: '#catalog' }
+  ];
+
+  const handleLinkClick = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <header style={{
@@ -25,28 +38,53 @@ export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
         height: '4.5rem',
         padding: '0 1.5rem'
       }}>
-        {/* Brand Logo Lockup */}
-        <a href="#" style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          textDecoration: 'none',
-          gap: '0.2rem'
-        }}>
-          <span className="font-impact" style={{
-            fontSize: '1.9rem',
-            color: '#FFFFFF',
-            letterSpacing: '0.06em'
+        {/* Left: Mobile Menu Toggle & Brand Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <button
+            type="button"
+            className="mobile-nav-toggle"
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileMenuOpen}
+            style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: 'var(--radius-full)',
+              backgroundColor: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer'
+            }}
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+
+          {/* Brand Logo Lockup */}
+          <a href="#" style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            gap: '0.2rem'
           }}>
-            ALFAREL
-          </span>
-          <span style={{
-            color: 'var(--bg-ticker)',
-            fontSize: '1.2rem',
-            fontWeight: 900
-          }}>
-            .ID
-          </span>
-        </a>
+            <span className="font-impact" style={{
+              fontSize: '1.9rem',
+              color: '#FFFFFF',
+              letterSpacing: '0.06em'
+            }}>
+              ALFAREL
+            </span>
+            <span style={{
+              color: 'var(--bg-ticker)',
+              fontSize: '1.2rem',
+              fontWeight: 900
+            }}>
+              .ID
+            </span>
+          </a>
+        </div>
 
         {/* Center Navigation Links (Editorial Reference) */}
         <nav style={{
@@ -54,70 +92,38 @@ export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
           gap: '2.5rem',
           alignItems: 'center'
         }} className="desktop-nav">
-          <a href="#featured-products" style={{
-            color: 'rgba(255, 255, 255, 0.75)',
-            textDecoration: 'none',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-            letterSpacing: '0.12em',
-            transition: 'color var(--transition-fast)'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--bg-ticker)'}
-          onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)'}
-          >
-            PRODUCTS
-          </a>
-          <a href="#top-collection" style={{
-            color: 'rgba(255, 255, 255, 0.75)',
-            textDecoration: 'none',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-            letterSpacing: '0.12em',
-            transition: 'color var(--transition-fast)'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--bg-ticker)'}
-          onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)'}
-          >
-            COLLECTIONS
-          </a>
-          <a href="#about-section" style={{
-            color: 'rgba(255, 255, 255, 0.75)',
-            textDecoration: 'none',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-            letterSpacing: '0.12em',
-            transition: 'color var(--transition-fast)'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--bg-ticker)'}
-          onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)'}
-          >
-            ABOUT
-          </a>
-          <a href="#curations-section" style={{
-            color: 'rgba(255, 255, 255, 0.75)',
-            textDecoration: 'none',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-            letterSpacing: '0.12em',
-            transition: 'color var(--transition-fast)'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--bg-ticker)'}
-          onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)'}
-          >
-            CURATIONS
-          </a>
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              style={{
+                color: 'rgba(255, 255, 255, 0.75)',
+                textDecoration: 'none',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                letterSpacing: '0.12em',
+                transition: 'color var(--transition-fast)'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--bg-ticker)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)'}
+            >
+              {link.label}
+            </a>
+          ))}
         </nav>
 
         {/* Right Action Icons & ORDER NOW Button */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
           {/* Search Trigger */}
           <button
             onClick={onOpenSearch}
+            aria-label={t('search_placeholder')}
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0.5rem',
+              width: '44px',
+              height: '44px',
               borderRadius: 'var(--radius-full)',
               backgroundColor: searchQuery ? 'rgba(227, 249, 52, 0.15)' : 'rgba(255, 255, 255, 0.08)',
               border: '1px solid',
@@ -134,12 +140,14 @@ export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
           {/* Admin shortcut */}
           <button
             onClick={onOpenAdmin}
+            aria-label="Admin Login"
             style={{
-              padding: '0.5rem',
+              width: '44px',
+              height: '44px',
               borderRadius: 'var(--radius-full)',
               backgroundColor: 'transparent',
               border: 'none',
-              color: 'rgba(255, 255, 255, 0.4)',
+              color: 'rgba(255, 255, 255, 0.5)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -148,7 +156,7 @@ export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
             }}
             title="Admin Login"
             onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.5)'}
           >
             <ShieldCheck size={18} />
           </button>
@@ -161,7 +169,8 @@ export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0.55rem',
+              width: '44px',
+              height: '44px',
               borderRadius: 'var(--radius-full)',
               backgroundColor: 'rgba(255, 255, 255, 0.08)',
               border: '1px solid rgba(255, 255, 255, 0.12)',
@@ -181,8 +190,8 @@ export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
             {totalItems > 0 && (
               <span style={{
                 position: 'absolute',
-                top: '-4px',
-                right: '-4px',
+                top: '-2px',
+                right: '-2px',
                 minWidth: '18px',
                 height: '18px',
                 borderRadius: 'var(--radius-full)',
@@ -204,6 +213,7 @@ export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
           {/* Yellow ORDER NOW Pill Button */}
           <button
             onClick={() => setIsCartOpen(true)}
+            className="order-now-desktop-btn"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -246,10 +256,52 @@ export const Header = ({ onOpenSearch, onOpenAdmin, searchQuery }) => {
         </div>
       </div>
 
+      {/* Mobile Navigation Drawer Dropdown */}
+      {isMobileMenuOpen && (
+        <div style={{
+          backgroundColor: '#0A0E13',
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          padding: '1.25rem 1.5rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem'
+        }}>
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              onClick={handleLinkClick}
+              style={{
+                color: '#FFFFFF',
+                textDecoration: 'none',
+                fontSize: '0.9rem',
+                fontWeight: 700,
+                letterSpacing: '0.1em',
+                padding: '0.4rem 0',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+              }}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )}
+
       <style>{`
+        .mobile-nav-toggle {
+          display: flex;
+        }
         @media (min-width: 860px) {
           .desktop-nav {
             display: flex !important;
+          }
+          .mobile-nav-toggle {
+            display: none !important;
+          }
+        }
+        @media (max-width: 520px) {
+          .order-now-desktop-btn {
+            display: none !important;
           }
         }
       `}</style>

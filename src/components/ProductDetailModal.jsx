@@ -25,6 +25,21 @@ export const ProductDetailModal = ({ product, onClose }) => {
     }
   }, [product?.id]);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [onClose]);
+
   if (!product) return null;
 
   const title = product.title_en || product.title_id;
@@ -53,6 +68,9 @@ export const ProductDetailModal = ({ product, onClose }) => {
       zIndex: 110
     }} onClick={onClose}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="product-modal-title"
         onClick={(e) => e.stopPropagation()}
         style={{
           backgroundColor: 'var(--bg-surface)',
@@ -68,28 +86,29 @@ export const ProductDetailModal = ({ product, onClose }) => {
           animation: 'slideUp 250ms cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
-        {/* Close Button */}
+        {/* Close Button (>= 44x44px touch target) */}
         <button
           onClick={onClose}
           style={{
             position: 'absolute',
-            top: '1rem',
-            right: '1rem',
+            top: '0.75rem',
+            right: '0.75rem',
             zIndex: 10,
-            width: '34px',
-            height: '34px',
+            width: '44px',
+            height: '44px',
             borderRadius: '50%',
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
             border: '1px solid var(--bg-muted)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: 'var(--text-primary)',
-            boxShadow: 'var(--shadow-xs)'
+            boxShadow: 'var(--shadow-xs)',
+            cursor: 'pointer'
           }}
           aria-label={t('close')}
         >
-          <X size={18} />
+          <X size={20} />
         </button>
 
         {/* Left: Product Images Gallery */}
@@ -186,15 +205,18 @@ export const ProductDetailModal = ({ product, onClose }) => {
             </span>
 
             {/* Title */}
-            <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--text-primary)',
-              marginTop: '0.35rem',
-              marginBottom: '0.75rem',
-              lineHeight: 1.3
-            }}>
+            <h2
+              id="product-modal-title"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '1.35rem',
+                fontWeight: 800,
+                color: 'var(--text-primary)',
+                marginTop: '0.35rem',
+                marginBottom: '0.75rem',
+                lineHeight: 1.3
+              }}
+            >
               {title}
             </h2>
 
@@ -250,7 +272,8 @@ export const ProductDetailModal = ({ product, onClose }) => {
                         type="button"
                         onClick={() => setSelectedSize(s)}
                         style={{
-                          minWidth: '42px',
+                          minWidth: '44px',
+                          minHeight: '44px',
                           padding: '0.4rem 0.75rem',
                           borderRadius: 'var(--radius-sm)',
                           border: '1.5px solid',
@@ -259,6 +282,7 @@ export const ProductDetailModal = ({ product, onClose }) => {
                           color: isSelected ? 'var(--color-primary)' : 'var(--text-primary)',
                           fontWeight: isSelected ? 700 : 500,
                           fontSize: '0.875rem',
+                          cursor: 'pointer',
                           transition: 'all var(--transition-fast)'
                         }}
                       >
@@ -284,13 +308,15 @@ export const ProductDetailModal = ({ product, onClose }) => {
                       onClick={() => setSelectedColor(c)}
                       style={{
                         padding: '0.35rem 0.75rem',
+                        minHeight: '36px',
                         borderRadius: 'var(--radius-full)',
                         border: '1px solid',
                         borderColor: selectedColor === c ? 'var(--color-primary)' : 'var(--bg-muted)',
                         backgroundColor: selectedColor === c ? 'var(--color-primary)' : 'var(--bg-subtle)',
                         color: selectedColor === c ? 'var(--text-white)' : 'var(--text-secondary)',
                         fontSize: '0.75rem',
-                        fontWeight: 600
+                        fontWeight: 600,
+                        cursor: 'pointer'
                       }}
                     >
                       {c}
@@ -337,14 +363,18 @@ export const ProductDetailModal = ({ product, onClose }) => {
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                aria-label="Decrease quantity"
                 style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '44px',
+                  height: '44px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '1rem',
-                  fontWeight: 700
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  border: 'none',
+                  background: 'none'
                 }}
               >
                 -
@@ -360,14 +390,18 @@ export const ProductDetailModal = ({ product, onClose }) => {
               <button
                 type="button"
                 onClick={() => setQuantity((q) => q + 1)}
+                aria-label="Increase quantity"
                 style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '44px',
+                  height: '44px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '1rem',
-                  fontWeight: 700
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  border: 'none',
+                  background: 'none'
                 }}
               >
                 +

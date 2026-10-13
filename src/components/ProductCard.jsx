@@ -24,7 +24,16 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
 
   return (
     <div
+      role="article"
+      tabIndex={0}
+      aria-label={`View ${title}`}
       onClick={() => onSelectProduct(product)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelectProduct(product);
+        }
+      }}
       style={{
         backgroundColor: '#FFFFFF',
         borderRadius: 'var(--radius-md)',
@@ -261,8 +270,9 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
             )}
           </div>
 
-          {/* Quick Action Button */}
+          {/* Quick Action Button (>= 44x44px touch target) */}
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               if (!isSoldOut) {
@@ -272,17 +282,19 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
               }
             }}
             disabled={isSoldOut}
+            aria-label={isSoldOut ? `View details for ${title}` : `Add ${title} to Cart`}
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '34px',
-              height: '34px',
+              minWidth: '44px',
+              minHeight: '44px',
               borderRadius: 'var(--radius-full)',
               backgroundColor: isSoldOut ? 'var(--bg-muted)' : 'var(--color-seafoam-light)',
               color: isSoldOut ? 'var(--text-tertiary)' : 'var(--color-primary)',
               border: '1px solid',
               borderColor: isSoldOut ? 'transparent' : 'rgba(98, 182, 168, 0.4)',
+              cursor: isSoldOut ? 'default' : 'pointer',
               transition: 'all var(--transition-fast)'
             }}
             onMouseEnter={(e) => {
@@ -301,7 +313,7 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
             }}
             title={isSoldOut ? t('out_of_stock') : t('add_to_cart')}
           >
-            {isSoldOut ? <Eye size={15} /> : <ShoppingBag size={15} />}
+            {isSoldOut ? <Eye size={16} /> : <ShoppingBag size={16} />}
           </button>
         </div>
       </div>

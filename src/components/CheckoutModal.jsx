@@ -35,6 +35,22 @@ export const CheckoutModal = ({ storeSettings }) => {
     }
   }, [isCheckoutOpen, orderNote]);
 
+  useEffect(() => {
+    if (!isCheckoutOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsCheckoutOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isCheckoutOpen, setIsCheckoutOpen]);
+
   if (!isCheckoutOpen) return null;
 
   const shippingRates = {
@@ -109,6 +125,9 @@ export const CheckoutModal = ({ storeSettings }) => {
       zIndex: 140
     }}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Checkout"
         onClick={(e) => e.stopPropagation()}
         style={{
           backgroundColor: 'var(--bg-surface)',
@@ -123,16 +142,24 @@ export const CheckoutModal = ({ storeSettings }) => {
           animation: 'slideUp 250ms cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
-        {/* Close Button */}
+        {/* Close Button (>= 44x44px touch target) */}
         <button
           onClick={() => setIsCheckoutOpen(false)}
+          aria-label="Close checkout modal"
           style={{
             position: 'absolute',
-            top: '1.25rem',
-            right: '1.25rem',
-            padding: '0.35rem',
+            top: '1rem',
+            right: '1rem',
+            width: '44px',
+            height: '44px',
             borderRadius: '50%',
-            color: 'var(--text-secondary)'
+            color: 'var(--text-secondary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            border: 'none',
+            background: 'none'
           }}
         >
           <X size={20} />

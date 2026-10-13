@@ -19,6 +19,22 @@ export const CartDrawer = () => {
     clearCart
   } = useCart();
 
+  React.useEffect(() => {
+    if (!isCartOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsCartOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isCartOpen, setIsCartOpen]);
+
   if (!isCartOpen) return null;
 
   const formatPrice = (num) => new Intl.NumberFormat('en-US').format(num);
@@ -31,6 +47,9 @@ export const CartDrawer = () => {
   return (
     <div className="overlay" onClick={() => setIsCartOpen(false)} style={{ zIndex: 120 }}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Shopping Cart"
         onClick={(e) => e.stopPropagation()}
         style={{
           position: 'fixed',
@@ -69,13 +88,18 @@ export const CartDrawer = () => {
 
           <button
             onClick={() => setIsCartOpen(false)}
+            aria-label="Close shopping cart"
             style={{
-              padding: '0.4rem',
+              width: '44px',
+              height: '44px',
               borderRadius: '50%',
               color: 'var(--text-secondary)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              cursor: 'pointer',
+              border: 'none',
+              background: 'none'
             }}
           >
             <X size={20} />
