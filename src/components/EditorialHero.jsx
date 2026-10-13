@@ -3,6 +3,8 @@ import { editorialAssets } from '../data/editorialAssets';
 import { ArrowUpRight } from 'lucide-react';
 
 export const EditorialHero = () => {
+  const [heroImgSrc, setHeroImgSrc] = React.useState(editorialAssets.heroCutout);
+
   return (
     <section style={{
       position: 'relative',
@@ -92,8 +94,13 @@ export const EditorialHero = () => {
           pointerEvents: 'none'
         }}>
           <img
-            src={editorialAssets.heroCutout}
+            src={heroImgSrc}
             alt="AlfaREL Resort Model"
+            onError={() => {
+              if (heroImgSrc !== editorialAssets.heroModel) {
+                setHeroImgSrc(editorialAssets.heroModel);
+              }
+            }}
             style={{
               maxHeight: 'clamp(430px, 56vh, 590px)',
               width: 'auto',

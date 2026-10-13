@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     strictPort: false,
     watch: {
-      ignored: ['**/node_modules/**', '**/.git/**', '**/public/images/**']
+      ignored: ['**/node_modules/**', '**/.git/**']
     }
   }
 });
