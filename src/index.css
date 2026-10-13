@@ -63,6 +63,48 @@
   --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
   --transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
   --transition-bounce: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Editorial Layout Tokens (Option B + Referensi) */
+  --bg-twilight: #0C131A;
+  --bg-sand: #F7F4EC;
+  --bg-sunset: #EE592B;
+  --bg-ticker: #E3F934;
+  --font-condensed: 'Antonio', 'Bebas Neue', sans-serif;
+  --font-editorial: 'Outfit', sans-serif;
+}
+
+/* Infinite Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+.font-condensed {
+  font-family: var(--font-condensed);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.font-impact {
+  font-family: var(--font-condensed);
+  text-transform: uppercase;
+  line-height: 0.88;
+  letter-spacing: 0.02em;
 }
 
 /* ==========================================================================

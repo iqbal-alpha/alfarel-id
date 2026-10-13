@@ -21,7 +21,7 @@ export const CartDrawer = () => {
 
   if (!isCartOpen) return null;
 
-  const formatPrice = (num) => new Intl.NumberFormat('id-ID').format(num);
+  const formatPrice = (num) => new Intl.NumberFormat('en-US').format(num);
 
   const handleProceedToCheckout = () => {
     setIsCartOpen(false);
@@ -135,7 +135,7 @@ export const CartDrawer = () => {
             /* Cart Items List */
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {items.map((item) => {
-                const title = lang === 'en' ? item.title_en : item.title_id;
+                const title = item.title_en || item.title_id;
                 return (
                   <div
                     key={item.cartItemId}
@@ -189,7 +189,7 @@ export const CartDrawer = () => {
                             }}
                             onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-accent-coral)'}
                             onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-tertiary)'}
-                            title="Hapus"
+                            title="Remove item"
                           >
                             <Trash2 size={16} />
                           </button>

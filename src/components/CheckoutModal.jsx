@@ -31,20 +31,20 @@ export const CheckoutModal = ({ storeSettings }) => {
   };
 
   const shippingRateLabels = {
-    zone1: lang === 'en' ? 'Greater Jakarta (IDR 10,000)' : 'Jabodetabek (Rp 10.000)',
-    zone2: lang === 'en' ? 'Java Island - Outside Jakarta (IDR 18,000)' : 'Pulau Jawa - Luar Jabodetabek (Rp 18.000)',
-    zone3: lang === 'en' ? 'Outside Java Island (IDR 30,000)' : 'Luar Pulau Jawa (Rp 30.000)'
+    zone1: 'Greater Jakarta (IDR 10,000)',
+    zone2: 'Java Island - Outside Jakarta (IDR 18,000)',
+    zone3: 'Outside Java Island (IDR 30,000)'
   };
 
   const currentShippingCost = shippingRates[shippingZone] || 10000;
   const grandTotal = subtotal + currentShippingCost;
 
-  const formatPrice = (num) => new Intl.NumberFormat('id-ID').format(num);
+  const formatPrice = (num) => new Intl.NumberFormat('en-US').format(num);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !phone || !address || !city) {
-      alert('Mohon lengkapi Nama, Nomor WA, Alamat, dan Kota/Kecamatan.');
+      alert('Please fill in your Full Name, WhatsApp Number, Address, and City/District.');
       return;
     }
 
@@ -56,37 +56,37 @@ export const CheckoutModal = ({ storeSettings }) => {
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
     const orderId = `ALF-${dateStr}-${randomSuffix}`;
 
-    // Compile items list string
+    // Compile items list string in English
     const itemsLines = items.map((item, index) => {
-      const itemTitle = lang === 'en' ? item.title_en : item.title_id;
+      const itemTitle = item.title_en || item.title_id;
       const colorText = item.color ? ` (${item.color})` : '';
-      return `${index + 1}. ${itemTitle}${colorText}\n   • Ukuran: ${item.size}\n   • Qty: ${item.quantity} pcs @ Rp ${formatPrice(item.price)} = Rp ${formatPrice(item.price * item.quantity)}`;
+      return `${index + 1}. ${itemTitle}${colorText}\n   • Size: ${item.size}\n   • Qty: ${item.quantity} pcs @ IDR ${formatPrice(item.price)} = IDR ${formatPrice(item.price * item.quantity)}`;
     }).join('\n');
 
-    // Build clean professional WhatsApp message template
-    const rawMessage = `*PESANAN BARU — ALFAREL.ID*
-ID Pesanan: #${orderId}
+    // Build clean professional WhatsApp message template in English
+    const rawMessage = `*NEW ORDER — ALFAREL.ID*
+Order ID: #${orderId}
 ------------------------------------------
-*DAFTAR ITEM BELANJA:*
+*ORDERED ITEMS:*
 ${itemsLines}
 
 ------------------------------------------
-*RINGKASAN PEMBAYARAN:*
-• Total Item: ${items.reduce((s, i) => s + i.quantity, 0)} pcs
-• Subtotal: Rp ${formatPrice(subtotal)}
-• Ongkos Kirim (${shippingRateLabels[shippingZone]}): Rp ${formatPrice(currentShippingCost)}
-• *TOTAL TRANSFER: Rp ${formatPrice(grandTotal)}*
+*PAYMENT SUMMARY:*
+• Total Items: ${items.reduce((s, i) => s + i.quantity, 0)} pcs
+• Subtotal: IDR ${formatPrice(subtotal)}
+• Shipping (${shippingRateLabels[shippingZone]}): IDR ${formatPrice(currentShippingCost)}
+• *TOTAL AMOUNT: IDR ${formatPrice(grandTotal)}*
 
 ------------------------------------------
-*DATA PENGIRIMAN:*
-• Nama Penerima: ${name}
-• No. WhatsApp: ${phone}
-• Alamat: ${address}
-• Kecamatan/Kota: ${city}
-• Ekspedisi Favorit: ${courier}
-• Catatan: ${additionalNote || '-'}
+*DELIVERY DETAILS:*
+• Customer Name: ${name}
+• WhatsApp Contact: ${phone}
+• Delivery Address: ${address}
+• City / District: ${city}
+• Preferred Courier: ${courier}
+• Special Notes: ${additionalNote || '-'}
 
-Mohon konfirmasi ketersediaan stok serta nomor rekening / QRIS pembayaran. Terima kasih.`;
+Please confirm product availability and provide payment details (Bank Transfer / QRIS). Thank you!`;
 
     const cleanWaNumber = (storeSettings?.whatsappNumber || '6281234567890').replace(/\D/g, '');
     const waUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(rawMessage)}`;

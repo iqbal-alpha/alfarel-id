@@ -4,13 +4,16 @@ import App from './App';
 import './index.css';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { CartProvider } from './context/CartContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <LanguageProvider>
-      <CartProvider>
-        <App />
-      </CartProvider>
-    </LanguageProvider>
+    <ErrorBoundary>
+      <LanguageProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </LanguageProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );

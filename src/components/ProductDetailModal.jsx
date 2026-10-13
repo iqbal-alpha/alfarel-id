@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useCart } from '../context/CartContext';
 import { StockBadge } from './StockBadge';
 import { X, ShoppingBag, Check, ShieldCheck, Truck, RefreshCw } from 'lucide-react';
+
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=900&q=85';
 
 export const ProductDetailModal = ({ product, onClose }) => {
   const { lang, t } = useLanguage();
@@ -14,14 +16,26 @@ export const ProductDetailModal = ({ product, onClose }) => {
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
 
+  useEffect(() => {
+    setActiveImageIndex(0);
+    if (product) {
+      setSelectedSize((product.sizes && product.sizes[0]) || 'All Size');
+      setSelectedColor((product.colors && product.colors[0]) || '');
+      setQuantity(1);
+    }
+  }, [product?.id]);
+
   if (!product) return null;
 
-  const title = lang === 'en' ? product.title_en : product.title_id;
-  const description = lang === 'en' ? product.description_en : product.description_id;
-  const material = lang === 'en' ? product.material_en : product.material_id;
+  const title = product.title_en || product.title_id;
+  const description = product.description_en || product.description_id;
+  const material = product.material_en || product.material_id;
   const isSoldOut = product.stockStatus === 'sold_out';
 
-  const formatPrice = (num) => new Intl.NumberFormat('id-ID').format(num);
+  const imagesList = (product.images && product.images.length > 0) ? product.images : [FALLBACK_IMAGE];
+  const currentImage = imagesList[activeImageIndex] || imagesList[0] || FALLBACK_IMAGE;
+
+  const formatPrice = (num) => new Intl.NumberFormat('en-US').format(num);
 
   const handleAddToCart = () => {
     if (isSoldOut) return;
@@ -96,8 +110,12 @@ export const ProductDetailModal = ({ product, onClose }) => {
             backgroundColor: '#FFF'
           }}>
             <img
-              src={product.images[activeImageIndex] || product.images[0]}
+              src={currentImage}
               alt={title}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = FALLBACK_IMAGE;
+              }}
               style={{
                 position: 'absolute',
                 top: 0,
@@ -113,24 +131,35 @@ export const ProductDetailModal = ({ product, onClose }) => {
           </div>
 
           {/* Thumbnails row */}
-          {product.images.length > 1 && (
-            <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto' }}>
-              {product.images.map((img, idx) => (
+          {imagesList.length > 1 && (
+            <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.25rem' }}>
+              {imagesList.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setActiveImageIndex(idx)}
                   style={{
-                    width: '60px',
-                    height: '60px',
+                    width: '64px',
+                    height: '64px',
                     borderRadius: 'var(--radius-sm)',
                     overflow: 'hidden',
                     border: '2px solid',
                     borderColor: activeImageIndex === idx ? 'var(--color-primary)' : 'transparent',
                     padding: 0,
-                    flexShrink: 0
+                    flexShrink: 0,
+                    cursor: 'pointer',
+                    backgroundColor: '#FFFFFF',
+                    transition: 'border-color var(--transition-fast)'
                   }}
                 >
-                  <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img
+                    src={img}
+                    alt=""
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = FALLBACK_IMAGE;
+                    }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
                 </button>
               ))}
             </div>

@@ -72,7 +72,7 @@ export const AdminPanel = ({
   };
 
   const handleDeleteProduct = (id) => {
-    if (window.confirm('Yakin ingin menghapus produk ini?')) {
+    if (window.confirm('Are you sure you want to delete this product?')) {
       setProducts((prev) => prev.filter((p) => p.id !== id));
     }
   };

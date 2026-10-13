@@ -3,9 +3,18 @@ import { useLanguage } from './i18n/LanguageContext';
 import { useCart } from './context/CartContext';
 import { initialProducts, initialCategories, initialStoreSettings } from './data/mockProducts';
 
-import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
-import { HeroBanner } from './components/HeroBanner';
+import { MarqueeTicker } from './components/MarqueeTicker';
+import { EditorialHero } from './components/EditorialHero';
+import { AboutSection } from './components/AboutSection';
+import { TopCollectionSection } from './components/TopCollectionSection';
+import { FeaturedProductsSection } from './components/FeaturedProductsSection';
+import { EditorialMoodGallery } from './components/EditorialMoodGallery';
+import { CuratedBrandsSection } from './components/CuratedBrandsSection';
+import { ProductSpotlightSection } from './components/ProductSpotlightSection';
+import { NextDropBanner } from './components/NextDropBanner';
+import { PhilosophyFooterSection } from './components/PhilosophyFooterSection';
+
 import { CategoryFilter } from './components/CategoryFilter';
 import { SearchBar } from './components/SearchBar';
 import { ProductCard } from './components/ProductCard';
@@ -14,10 +23,8 @@ import { FloatingCartButton } from './components/FloatingCartButton';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AdminPanel } from './components/AdminPanel';
-import { Logo } from './components/Logo';
-import { CategoryBentoGrid } from './components/CategoryBentoGrid';
 
-import { Sparkles, MessageCircle, Heart, Shield, RefreshCw, Search, Check } from 'lucide-react';
+import { Sparkles, Search } from 'lucide-react';
 
 export function MainStore() {
   const { lang, t } = useLanguage();
@@ -87,35 +94,24 @@ export function MainStore() {
     }, 300);
   };
 
-  const handleQuickSearch = ({ query, category }) => {
-    if (query !== undefined && query.trim() !== '') {
-      setSearchQuery(query);
-    }
-    if (category) {
-      setActiveCategory(category);
-    }
+  const handleSelectCuratedCategory = (catId) => {
+    setActiveCategory(catId);
     const catalogEl = document.getElementById('catalog');
     if (catalogEl) {
       catalogEl.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const announcementText =
-    lang === 'en' ? storeSettings.announcement_en : storeSettings.announcement_id;
-
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* 1. Top Announcement Bar */}
-      <AnnouncementBar announcementText={announcementText} />
-
-      {/* 2. Sticky Header Navbar */}
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-sand)' }}>
+      {/* 1. Sticky Editorial Header (referensi.webp) */}
       <Header
         onOpenSearch={handleOpenSearchFocus}
         onOpenAdmin={() => setIsAdminView(true)}
         searchQuery={searchQuery}
       />
 
-      {/* Main Content: Admin View or Catalog View */}
+      {/* Main Content: Admin View or 11-Section Editorial Store View */}
       {isAdminView ? (
         <AdminPanel
           products={products}
@@ -127,51 +123,75 @@ export function MainStore() {
         />
       ) : (
         <main style={{ flex: 1 }}>
-          {/* 3. Hero Showcase Banner (Split 2-Column + Mobile Quick Search) */}
-          <HeroBanner
-            onExploreClick={() => {
-              const el = document.getElementById('catalog');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-            onQuickSearch={handleQuickSearch}
-            categories={categories}
+          {/* Section 1: Giant Condensed Hero (referensi.webp Hero) */}
+          <EditorialHero />
+
+          {/* Section 2: Animated Marquee Ticker Banner (referensi.webp Ticker) */}
+          <MarqueeTicker />
+
+          {/* Section 3: About AlfaREL Section (referensi.webp About) */}
+          <AboutSection />
+
+          {/* Section 4: Our Top Collection Numbered Cards [001] & [002] (referensi.webp) */}
+          <TopCollectionSection />
+
+          {/* Section 5: Featured Product Carousel in Terracotta (#EE592B) (referensi.webp) */}
+          <FeaturedProductsSection
+            products={products}
+            onSelectProduct={(p) => setSelectedProduct(p)}
           />
 
-          {/* 4. Category Bento Showcase Grid (Reference Image 3) */}
-          <CategoryBentoGrid
-            onSelectCategory={(catId) => {
-              setActiveCategory(catId);
-              const el = document.getElementById('catalog');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-            activeCategory={activeCategory}
+          {/* Section 6: Editorial Mood Gallery with Ghost Typography (referensi.webp) */}
+          <EditorialMoodGallery />
+
+          {/* Section 7: Our Best Curations List with Interactive Floating Preview (referensi.webp) */}
+          <CuratedBrandsSection
+            onSelectCategory={handleSelectCuratedCategory}
           />
 
-          {/* 5. Bestseller Catalog Section (Reference Image 4) */}
-          <section id="catalog" style={{ padding: '2.5rem 0 5rem' }}>
-            <div className="container">
-              {/* Catalog Section Header & Search */}
+          {/* Section 8: Spotlight Product Configurator with Color Swatches (referensi.webp) */}
+          <ProductSpotlightSection
+            products={products}
+          />
+
+          {/* Section 9: Next Drop Banner (referensi.webp) */}
+          <NextDropBanner />
+
+          {/* Section 10: Instant Search & Full E-Commerce Catalog Grid */}
+          <section id="catalog" style={{
+            padding: '5rem 1.5rem',
+            backgroundColor: 'var(--bg-sand)',
+            borderTop: '1px solid rgba(0,0,0,0.06)'
+          }}>
+            <div className="container" style={{ maxWidth: '1240px', margin: '0 auto' }}>
               <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: '1.25rem',
-                marginBottom: '1.5rem'
+                gap: '1.5rem',
+                marginBottom: '2rem'
               }}>
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--color-primary)', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                    <Sparkles size={14} />
-                    <span>{t('bestseller_title')}</span>
-                  </div>
-                  <h2 style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(1.5rem, 3vw, 2.1rem)',
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    color: 'var(--bg-sunset)',
+                    fontSize: '0.78rem',
                     fontWeight: 800,
-                    color: 'var(--text-primary)',
-                    marginTop: '0.2rem'
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em'
                   }}>
-                    {t('nav_catalog')}
+                    <Sparkles size={14} />
+                    <span>ALFAREL FULL E-CATALOG</span>
+                  </div>
+                  <h2 className="font-impact" style={{
+                    fontSize: 'clamp(2rem, 4vw, 3.2rem)',
+                    color: '#0C131A',
+                    margin: '0.3rem 0 0 0'
+                  }}>
+                    EXPLORE ALL VACATION PIECES
                   </h2>
                 </div>
 
@@ -184,7 +204,7 @@ export function MainStore() {
               </div>
 
               {/* Category Filter Chips */}
-              <div style={{ marginBottom: '2rem' }}>
+              <div style={{ marginBottom: '2.5rem' }}>
                 <CategoryFilter
                   categories={categories}
                   activeCategory={activeCategory}
@@ -193,17 +213,17 @@ export function MainStore() {
                 />
               </div>
 
-              {/* Search Result Status Banner (if searching) */}
+              {/* Search Result Status Banner */}
               {searchQuery && (
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '0.75rem 1rem',
+                  padding: '0.85rem 1.25rem',
                   borderRadius: 'var(--radius-sm)',
-                  backgroundColor: 'var(--bg-subtle)',
-                  border: '1px solid var(--bg-muted)',
-                  marginBottom: '1.5rem',
+                  backgroundColor: 'rgba(238, 89, 43, 0.08)',
+                  border: '1px solid rgba(238, 89, 43, 0.2)',
+                  marginBottom: '2rem',
                   fontSize: '0.875rem'
                 }}>
                   <span>
@@ -211,28 +231,34 @@ export function MainStore() {
                   </span>
                   <button
                     onClick={() => setSearchQuery('')}
-                    style={{ fontSize: '0.75rem', color: 'var(--color-primary)', fontWeight: 700 }}
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--bg-sunset)',
+                      fontWeight: 800,
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
                   >
                     {t('search_reset')}
                   </button>
                 </div>
               )}
 
-              {/* 5. Product Grid */}
+              {/* Product Grid */}
               {filteredProducts.length === 0 ? (
-                /* No Results State */
                 <div style={{
                   padding: '5rem 1rem',
                   textAlign: 'center',
-                  backgroundColor: 'var(--bg-surface)',
-                  borderRadius: 'var(--radius-lg)',
-                  border: '1px solid var(--bg-muted)'
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '16px',
+                  border: '1px solid rgba(0, 0, 0, 0.08)'
                 }}>
                   <div style={{
                     width: '56px',
                     height: '56px',
                     borderRadius: '50%',
-                    backgroundColor: 'var(--bg-subtle)',
+                    backgroundColor: 'var(--bg-sand)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -242,17 +268,16 @@ export function MainStore() {
                     <Search size={26} strokeWidth={1.5} />
                   </div>
                   <h3 style={{
-                    fontFamily: 'var(--font-display)',
                     fontSize: '1.25rem',
-                    fontWeight: 700,
-                    color: 'var(--text-primary)',
+                    fontWeight: 800,
+                    color: '#0C131A',
                     marginTop: '1.25rem',
                     marginBottom: '0.5rem'
                   }}>
                     {t('search_no_results')}
                   </h3>
                   <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                    Coba gunakan kata kunci lain seperti "linen", "shirt", "pantai", atau ganti filter kategori.
+                    Try searching with terms like "linen", "shirt", "boardshorts", or reset your filters.
                   </p>
                   <button
                     onClick={() => {
@@ -265,15 +290,10 @@ export function MainStore() {
                   </button>
                 </div>
               ) : (
-                /* Responsive Product Cards Grid */
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-                  gap: '1.25rem',
-                  '@media (min-width: 640px)': {
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-                    gap: '1.5rem'
-                  }
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+                  gap: '1.5rem'
                 }} className="product-grid">
                   {filteredProducts.map((product) => (
                     <ProductCard
@@ -292,127 +312,32 @@ export function MainStore() {
             </div>
           </section>
 
-          {/* 6. Footer */}
-          <footer style={{
-            backgroundColor: 'var(--text-primary)',
-            color: 'var(--text-white)',
-            padding: '3.5rem 0 2.5rem',
-            marginTop: 'auto'
-          }}>
-            <div className="container">
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                gap: '2.5rem',
-                paddingBottom: '2.5rem',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.12)'
-              }}>
-                {/* Brand Column */}
-                <div>
-                  <div style={{ marginBottom: '1.25rem' }}>
-                    <Logo variant="light" size="large" />
-                  </div>
-                  <p style={{ fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.6, maxWidth: '340px' }}>
-                    {t('footer_about')}
-                  </p>
-                </div>
-
-                {/* Service Hours & Contact */}
-                <div>
-                  <h4 style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '1rem',
-                    fontWeight: 700,
-                    marginBottom: '1rem',
-                    color: 'var(--color-seafoam)'
-                  }}>
-                    Layanan Pelanggan WhatsApp
-                  </h4>
-                  <p style={{ fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.7)', marginBottom: '0.75rem' }}>
-                    {t('footer_hours')}
-                  </p>
-                  <a
-                    href={`https://wa.me/${storeSettings.whatsappNumber.replace(/\D/g, '')}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn btn-whatsapp"
-                    style={{ fontSize: '0.85rem', padding: '0.55rem 1rem' }}
-                  >
-                    <MessageCircle size={16} />
-                    <span>Chat CS: +{storeSettings.whatsappNumber}</span>
-                  </a>
-                </div>
-
-                {/* Values & Guarantee */}
-                <div>
-                  <h4 style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '1rem',
-                    fontWeight: 700,
-                    marginBottom: '1rem',
-                    color: 'var(--color-seafoam)'
-                  }}>
-                    Jaminan Belanja
-                  </h4>
-                  <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.7)' }}>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <Check size={14} color="var(--color-seafoam)" style={{ flexShrink: 0 }} />
-                      <span>100% Foto Produk Asli & Bahan Berkualitas</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <Check size={14} color="var(--color-seafoam)" style={{ flexShrink: 0 }} />
-                      <span>Fast Checkout Tanpa Biaya Tambahan</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <Check size={14} color="var(--color-seafoam)" style={{ flexShrink: 0 }} />
-                      <span>Pilihan Ekspedisi Nasional Cepat & Terpercaya</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <Check size={14} color="var(--color-seafoam)" style={{ flexShrink: 0 }} />
-                      <span>Tukar Ukuran Fleksibel via Chat WhatsApp</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Copyright & Admin Link */}
-              <div style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingTop: '1.5rem',
-                fontSize: '0.75rem',
-                color: 'rgba(255, 255, 255, 0.5)'
-              }}>
-                <span>{t('footer_copyright')}</span>
-                <button
-                  onClick={() => setIsAdminView(true)}
-                  style={{
-                    color: 'rgba(255, 255, 255, 0.5)',
-                    fontSize: '0.75rem',
-                    textDecoration: 'underline'
-                  }}
-                >
-                  {t('nav_admin')} Portal
-                </button>
-              </div>
-            </div>
-          </footer>
+          {/* Section 11: Philosophy Quote & Dual B&W Editorial Footer (referensi.webp) */}
+          <PhilosophyFooterSection />
         </main>
       )}
 
-      {/* Interactive Overlays & Modals */}
-      <ProductDetailModal
-        product={selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-      />
+      {/* Product Detail Modal */}
+      {selectedProduct && (
+        <ProductDetailModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onAddToCart={addToCart}
+        />
+      )}
 
-      <CartDrawer />
-
+      {/* Floating Cart Launcher Button */}
       <FloatingCartButton />
 
-      <CheckoutModal storeSettings={storeSettings} />
+      {/* Slide-out Cart Drawer with Instant WhatsApp Checkout */}
+      <CartDrawer
+        storeSettings={storeSettings}
+      />
+
+      {/* WhatsApp Fast Checkout Modal */}
+      <CheckoutModal
+        storeSettings={storeSettings}
+      />
     </div>
   );
 }

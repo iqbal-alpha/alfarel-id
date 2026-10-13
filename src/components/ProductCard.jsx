@@ -7,19 +7,19 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
   const { lang, t } = useLanguage();
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
 
-  const title = lang === 'en' ? product.title_en : product.title_id;
-  const material = lang === 'en' ? product.material_en : product.material_id;
+  const title = product.title_en || product.title_id;
+  const material = product.material_en || product.material_id;
   const isSoldOut = product.stockStatus === 'sold_out';
 
   const formatPrice = (num) => {
-    return new Intl.NumberFormat('id-ID').format(num);
+    return new Intl.NumberFormat('en-US').format(num);
   };
 
   const categoryLabels = {
-    shirts: lang === 'en' ? 'Linen Shirts' : 'Kemeja Linen',
-    boardshorts: lang === 'en' ? 'Boardshorts' : 'Celana Pantai',
-    tees: lang === 'en' ? 'Oversized Tees' : 'Kaos Santai',
-    accessories: lang === 'en' ? 'Accessories' : 'Aksesoris'
+    shirts: 'Linen Beach Shirts',
+    boardshorts: 'Boardshorts & Trunks',
+    tees: 'Oversized Beach Tees',
+    accessories: 'Beach Accessories'
   };
 
   return (
