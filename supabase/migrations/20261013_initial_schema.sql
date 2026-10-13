@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS alfarel_products (
     price NUMERIC(12, 2) NOT NULL,
     compare_at_price NUMERIC(12, 2), -- Harga coret / promo (opsional)
     images TEXT[] NOT NULL DEFAULT '{}', -- Array URL gambar produk (multi-angle)
-    available_sizes VARCHAR(10)[] DEFAULT '{"S","M","L","XL"}',
+    available_sizes VARCHAR(50)[] DEFAULT '{"S","M","L","XL"}',
     available_colors VARCHAR(50)[] DEFAULT '{}',
     stock_status VARCHAR(20) DEFAULT 'ready', -- 'ready', 'low_stock', 'pre_order', 'sold_out'
     is_active BOOLEAN DEFAULT TRUE,

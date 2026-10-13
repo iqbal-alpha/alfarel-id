@@ -3,6 +3,9 @@
 -- Target Tables: alfarel_* (Safe isolated namespace)
 -- ==============================================================================
 
+-- 0. Ensure column supports up to 50 characters for size tags (e.g. 'All Size', 'One Size')
+ALTER TABLE IF EXISTS alfarel_products ALTER COLUMN available_sizes TYPE VARCHAR(50)[];
+
 -- 1. Seed Categories
 INSERT INTO alfarel_categories (slug, name_id, name_en, sort_order)
 VALUES
@@ -247,7 +250,7 @@ VALUES
         89000,
         110000,
         ARRAY['/images/products/raffia-bucket-hat.jpg', '/images/products/raffia-bucket-hat-2.jpg'],
-        ARRAY['All Size (56-58cm)'],
+        ARRAY['All Size'],
         ARRAY['Natural Straw'],
         'ready',
         true,
@@ -267,7 +270,7 @@ VALUES
         99000,
         129000,
         ARRAY['/images/products/sunkissed-canvas-tote.jpg', '/images/products/sunkissed-canvas-tote-2.jpg'],
-        ARRAY['One Size (40cm x 35cm x 12cm)'],
+        ARRAY['One Size'],
         ARRAY['Off-White Canvas & Teal'],
         'ready',
         false,
