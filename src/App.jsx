@@ -19,11 +19,18 @@ import { PhilosophyFooterSection } from './components/PhilosophyFooterSection';
 import { CategoryFilter } from './components/CategoryFilter';
 import { SearchBar } from './components/SearchBar';
 import { ProductCard } from './components/ProductCard';
-import { ProductDetailModal } from './components/ProductDetailModal';
 import { FloatingCartButton } from './components/FloatingCartButton';
 import { CartDrawer } from './components/CartDrawer';
-import { CheckoutModal } from './components/CheckoutModal';
-import { AdminPanel } from './components/AdminPanel';
+
+const ProductDetailModal = React.lazy(() =>
+  import('./components/ProductDetailModal').then((m) => ({ default: m.ProductDetailModal }))
+);
+const CheckoutModal = React.lazy(() =>
+  import('./components/CheckoutModal').then((m) => ({ default: m.CheckoutModal }))
+);
+const AdminPanel = React.lazy(() =>
+  import('./components/AdminPanel').then((m) => ({ default: m.AdminPanel }))
+);
 import {
   isSupabaseConfigured,
   getCategories,
@@ -226,19 +233,21 @@ export function MainStore() {
 
       {/* Main Content: Admin View or 11-Section Editorial Store View */}
       {isAdminView ? (
-        <AdminPanel
-          products={products}
-          setProducts={setProducts}
-          categories={categories}
-          storeSettings={storeSettings}
-          setStoreSettings={setStoreSettings}
-          onClose={() => {
-            setIsAdminView(false);
-            if (window.location.hash === '#admin') {
-              window.history.pushState(null, '', window.location.pathname);
-            }
-          }}
-        />
+        <React.Suspense fallback={<div style={{ padding: '5rem 1rem', textAlign: 'center', color: 'var(--text-secondary)' }}>Loading Admin...</div>}>
+          <AdminPanel
+            products={products}
+            setProducts={setProducts}
+            categories={categories}
+            storeSettings={storeSettings}
+            setStoreSettings={setStoreSettings}
+            onClose={() => {
+              setIsAdminView(false);
+              if (window.location.hash === '#admin') {
+                window.history.pushState(null, '', window.location.pathname);
+              }
+            }}
+          />
+        </React.Suspense>
       ) : (
         <main style={{ flex: 1 }}>
           {/* Section 1: Giant Condensed Hero (referensi.webp Hero) */}
@@ -437,11 +446,13 @@ export function MainStore() {
 
       {/* Product Detail Modal */}
       {selectedProduct && (
-        <ProductDetailModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-          onAddToCart={addToCart}
-        />
+        <React.Suspense fallback={null}>
+          <ProductDetailModal
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
+            onAddToCart={addToCart}
+          />
+        </React.Suspense>
       )}
 
       {/* Floating Cart Launcher Button */}
@@ -453,9 +464,11 @@ export function MainStore() {
       />
 
       {/* WhatsApp Fast Checkout Modal */}
-      <CheckoutModal
-        storeSettings={storeSettings}
-      />
+      <React.Suspense fallback={null}>
+        <CheckoutModal
+          storeSettings={storeSettings}
+        />
+      </React.Suspense>
     </div>
   );
 }

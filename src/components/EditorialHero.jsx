@@ -101,6 +101,7 @@ export const EditorialHero = () => {
           <img
             src={heroImgSrc}
             alt="AlfaREL Beach Resort Model"
+            fetchPriority="high"
             onError={() => {
               if (heroImgSrc !== editorialAssets.heroModel) {
                 setHeroImgSrc(editorialAssets.heroModel);
