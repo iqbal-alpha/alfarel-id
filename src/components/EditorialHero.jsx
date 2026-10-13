@@ -50,7 +50,7 @@ export const EditorialHero = () => {
         {/* Layer 1: Giant Background Typography ALFAREL (Matching FASHIOLY in referensi.webp) */}
         <div style={{
           position: 'absolute',
-          top: '32%',
+          top: '30%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '100%',
@@ -59,8 +59,20 @@ export const EditorialHero = () => {
           pointerEvents: 'none',
           userSelect: 'none'
         }}>
+          {/* Eyebrow tagline cleanly placed ABOVE the brand name to eliminate any overlap */}
+          <div style={{
+            fontSize: 'clamp(0.68rem, 1.2vw, 0.82rem)',
+            fontWeight: 800,
+            letterSpacing: '0.32em',
+            color: 'var(--bg-ticker)',
+            textTransform: 'uppercase',
+            marginBottom: '0.75rem',
+            opacity: 0.95
+          }}>
+            WEAR THE VACATION FEELING
+          </div>
           <h1 className="font-impact" style={{
-            fontSize: 'clamp(68px, 17vw, 230px)',
+            fontSize: 'clamp(72px, 18vw, 240px)',
             color: 'rgba(255, 255, 255, 0.94)',
             margin: 0,
             lineHeight: 0.85,
@@ -69,20 +81,9 @@ export const EditorialHero = () => {
           }}>
             ALFAREL
           </h1>
-          <div style={{
-            fontSize: 'clamp(0.75rem, 1.5vw, 0.95rem)',
-            fontWeight: 800,
-            letterSpacing: '0.25em',
-            color: 'var(--bg-ticker)',
-            textTransform: 'uppercase',
-            marginTop: '0.5rem',
-            opacity: 0.9
-          }}>
-            WEAR THE VACATION FEELING
-          </div>
         </div>
 
-        {/* Layer 2: Center Model Cutout without background (Matching referensi.webp cutout) */}
+        {/* Layer 2: Center Model Cutout without background (Authentic Beach Resort Wear) */}
         <div style={{
           position: 'relative',
           zIndex: 2,
@@ -90,31 +91,29 @@ export const EditorialHero = () => {
           justifyContent: 'center',
           alignItems: 'flex-end',
           width: '100%',
-          maxHeight: 'clamp(440px, 58vh, 600px)',
+          maxHeight: 'clamp(460px, 62vh, 640px)',
           pointerEvents: 'none'
         }}>
           <img
             src={heroImgSrc}
-            alt="AlfaREL Resort Model"
+            alt="AlfaREL Beach Resort Model"
             onError={() => {
               if (heroImgSrc !== editorialAssets.heroModel) {
                 setHeroImgSrc(editorialAssets.heroModel);
               }
             }}
             style={{
-              maxHeight: 'clamp(430px, 56vh, 590px)',
+              maxHeight: 'clamp(450px, 60vh, 620px)',
               width: 'auto',
-              maxWidth: '85%',
+              maxWidth: '90%',
               objectFit: 'contain',
               display: 'block',
-              filter: 'drop-shadow(0 25px 45px rgba(0, 0, 0, 0.75))',
-              maskImage: 'linear-gradient(to bottom, black 82%, transparent 100%)',
-              WebkitMaskImage: 'linear-gradient(to bottom, black 82%, transparent 100%)'
+              filter: 'drop-shadow(0 20px 45px rgba(0, 0, 0, 0.85))'
             }}
           />
         </div>
 
-        {/* Layer 3: Flanking Bottom Content Row (Matching referensi.webp lower overlay) */}
+        {/* Layer 3: Flanking Bottom Content Row (Clean Floating Typography Matching referensi.webp) */}
         <div className="hero-info-row" style={{
           position: 'relative',
           zIndex: 4,
@@ -122,67 +121,53 @@ export const EditorialHero = () => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-end',
-          marginTop: '-4rem',
-          paddingBottom: '0.5rem',
-          gap: '1.5rem',
-          flexWrap: 'wrap'
+          marginTop: '-3.5rem',
+          paddingBottom: '0.75rem',
+          gap: '2rem'
         }}>
-          {/* Left Narrative Blurb */}
+          {/* Left Narrative Blurb - Sleek floating typography matching referensi.webp */}
           <div style={{
-            flex: '1 1 320px',
-            maxWidth: '420px',
-            backgroundColor: 'rgba(10, 14, 19, 0.78)',
-            backdropFilter: 'blur(14px)',
-            WebkitBackdropFilter: 'blur(14px)',
-            padding: '1.25rem 1.5rem',
-            borderRadius: '14px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            boxShadow: '0 15px 35px rgba(0, 0, 0, 0.4)'
+            maxWidth: '280px'
           }}>
             <p style={{
-              fontSize: '0.88rem',
-              color: 'rgba(255, 255, 255, 0.88)',
-              lineHeight: 1.6,
-              margin: '0 0 0.85rem 0'
+              fontSize: '0.78rem',
+              fontWeight: 400,
+              color: 'rgba(255, 255, 255, 0.72)',
+              lineHeight: 1.55,
+              letterSpacing: '0.01em',
+              margin: '0 0 0.75rem 0'
             }}>
-              Breezy linen silhouettes and sun-drenched coastal tones. Crafted for relaxed beach club afternoons, ocean sunsets, and timeless vacation comfort.
+              Breezy linen cuts and sun-washed coastal tones, crafted for effortless afternoons and ocean sunsets.
             </p>
             <a
               href="#featured-products"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.4rem',
+                gap: '0.35rem',
                 color: 'var(--bg-ticker)',
                 textDecoration: 'none',
                 fontWeight: 800,
-                fontSize: '0.82rem',
-                letterSpacing: '0.08em'
+                fontSize: '0.75rem',
+                letterSpacing: '0.1em'
               }}
             >
               <span>EXPLORE DROPS</span>
-              <ArrowUpRight size={16} />
+              <ArrowUpRight size={14} />
             </a>
           </div>
 
-          {/* Right Social Proof & Review Badge */}
+          {/* Right Social Proof - Floating badge matching referensi.webp */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '1rem',
-            backgroundColor: 'rgba(10, 14, 19, 0.78)',
-            backdropFilter: 'blur(14px)',
-            WebkitBackdropFilter: 'blur(14px)',
-            padding: '1.15rem 1.6rem',
-            borderRadius: '14px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            boxShadow: '0 15px 35px rgba(0, 0, 0, 0.4)'
+            gap: '0.85rem'
           }}>
             {/* Avatar Stack */}
-            <div style={{ display: 'flex', marginRight: '0.25rem' }}>
+            <div style={{ display: 'flex' }}>
               <div style={{
-                width: '40px',
-                height: '40px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '50%',
                 border: '2px solid #0A0E13',
                 overflow: 'hidden',
@@ -191,30 +176,30 @@ export const EditorialHero = () => {
                 <img src={editorialAssets.collection002} alt="Customer" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div style={{
-                width: '40px',
-                height: '40px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '50%',
                 border: '2px solid #0A0E13',
                 overflow: 'hidden',
-                marginLeft: '-12px',
+                marginLeft: '-10px',
                 backgroundColor: 'var(--color-seafoam)'
               }}>
                 <img src={editorialAssets.collection001} alt="Customer" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div style={{
-                width: '40px',
-                height: '40px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '50%',
                 border: '2px solid #0A0E13',
                 overflow: 'hidden',
-                marginLeft: '-12px',
+                marginLeft: '-10px',
                 backgroundColor: 'var(--bg-ticker)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#0A0E13',
                 fontWeight: 900,
-                fontSize: '0.85rem'
+                fontSize: '0.82rem'
               }}>
                 ★
               </div>
@@ -222,18 +207,19 @@ export const EditorialHero = () => {
 
             <div>
               <div style={{
-                fontSize: '1rem',
+                fontSize: '0.92rem',
                 fontWeight: 900,
                 color: '#FFFFFF',
-                letterSpacing: '0.04em'
+                letterSpacing: '0.04em',
+                lineHeight: 1.2
               }}>
                 3.5+ MILLION
               </div>
               <div style={{
-                fontSize: '0.72rem',
+                fontSize: '0.68rem',
                 fontWeight: 700,
-                letterSpacing: '0.1em',
-                color: 'rgba(255, 255, 255, 0.65)',
+                letterSpacing: '0.12em',
+                color: 'rgba(255, 255, 255, 0.6)',
                 textTransform: 'uppercase'
               }}>
                 SATISFIED SHOPPERS
