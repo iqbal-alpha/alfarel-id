@@ -5,6 +5,10 @@ import { ArrowUpRight } from 'lucide-react';
 export const EditorialHero = () => {
   const [heroImgSrc, setHeroImgSrc] = React.useState(editorialAssets.heroCutout);
 
+  React.useEffect(() => {
+    setHeroImgSrc(editorialAssets.heroCutout);
+  }, []);
+
   return (
     <section style={{
       position: 'relative',
