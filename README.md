@@ -165,9 +165,9 @@
    ```
    Edit `.env` with your Supabase credentials (optional for local mock mode):
    ```env
-   VITE_SUPABASE_URL=https://your-project.supabase.co
+   VITE_SUPABASE_URL=https://your-project-id.supabase.co
    VITE_SUPABASE_ANON_KEY=your-anon-key
-   VITE_ADMIN_HASH=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+   VITE_STORE_WHATSAPP=6281234567890
    ```
 
 4. **Start the Development Server:**
