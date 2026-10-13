@@ -2,11 +2,13 @@
 
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare_Pages-alfarel--id.pages.dev-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://alfarel-id.pages.dev/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL%20RLS-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
 [![Vitest](https://img.shields.io/badge/Tests-14%2F14%20Passing-729B1B?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
 [![WCAG](https://img.shields.io/badge/Accessibility-WCAG%20AA%20Compliant-1E6B7B?style=flat-square)](https://www.w3.org/WAI/standards-guidelines/wcag/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
+> 🌐 **Live Website:** [https://alfarel-id.pages.dev](https://alfarel-id.pages.dev/)  
 > **AlfaREL.ID Store** is a high-performance, editorial-grade e-commerce storefront crafted for relaxed coastal streetwear and vacation apparel. Built with a bespoke design system, seamless WhatsApp direct checkout, real-time inventory synchronization, and comprehensive accessibility (WCAG AA).
 
 ---
@@ -148,8 +150,8 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/alfarel-id-store.git
-   cd alfarel-id-store
+   git clone https://github.com/iqbal-alpha/alfarel-id.git
+   cd alfarel-id
    ```
 
 2. **Install dependencies:**
@@ -203,15 +205,19 @@ npx vitest
 
 ## 🚀 Production Build & Deployment
 
-Generate an optimized static production bundle:
+The application is deployed live on **Cloudflare Pages**:
+- **Production URL:** [https://alfarel-id.pages.dev](https://alfarel-id.pages.dev/)
+- **Deployment Platform:** Cloudflare Pages (Continuous Integration via GitHub)
+- **Framework Preset:** `React (Vite)`
+- **Build Command:** `npm run build`
+- **Build Output Directory:** `dist`
+- **SPA Routing & Security:** Powered by `public/_redirects` (200 catch-all routing) and `public/_headers` (OWASP/CSP hardened headers).
+
+To generate an optimized local static production bundle:
 
 ```bash
 npm run build
 ```
-
-The output in `dist/` is ready for zero-config deployment to **Cloudflare Pages**, **Vercel**, or **Netlify**:
-- **Build Command:** `npm run build`
-- **Output Directory:** `dist`
 
 ---
 
