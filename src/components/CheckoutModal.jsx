@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useCart } from '../context/CartContext';
 import { X, MessageCircle, Truck, MapPin, User, Phone, CheckCircle2 } from 'lucide-react';
 import { logOrder } from '../lib/supabase';
+import {
+  generateOrderId,
+  compileWhatsAppOrderMessage,
+  buildWhatsAppUrl
+} from '../lib/whatsapp';
 
 export const CheckoutModal = ({ storeSettings }) => {
   const { lang, t } = useLanguage();
@@ -11,7 +16,8 @@ export const CheckoutModal = ({ storeSettings }) => {
     subtotal,
     orderNote,
     isCheckoutOpen,
-    setIsCheckoutOpen
+    setIsCheckoutOpen,
+    clearCart
   } = useCart();
 
   const [name, setName] = useState('');
@@ -22,6 +28,12 @@ export const CheckoutModal = ({ storeSettings }) => {
   const [courier, setCourier] = useState('J&T Express');
   const [additionalNote, setAdditionalNote] = useState(orderNote || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isCheckoutOpen) {
+      setAdditionalNote(orderNote || '');
+    }
+  }, [isCheckoutOpen, orderNote]);
 
   if (!isCheckoutOpen) return null;
 
@@ -44,70 +56,48 @@ export const CheckoutModal = ({ storeSettings }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name || !phone || !address || !city) {
+    if (!name.trim() || !phone.trim() || !address.trim() || !city.trim()) {
       alert('Please fill in your Full Name, WhatsApp Number, Address, and City/District.');
       return;
     }
 
     setIsSubmitting(true);
 
-    // Generate Order ID
-    const today = new Date();
-    const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const orderId = `ALF-${dateStr}-${randomSuffix}`;
+    const orderId = generateOrderId();
+    const rawMessage = compileWhatsAppOrderMessage({
+      orderId,
+      items,
+      subtotal,
+      shippingCost: currentShippingCost,
+      shippingZoneLabel: shippingRateLabels[shippingZone] || 'Standard Shipping',
+      customerName: name,
+      customerPhone: phone,
+      deliveryAddress: address,
+      city,
+      courier,
+      specialNotes: additionalNote
+    });
 
-    // Compile items list string in English
-    const itemsLines = items.map((item, index) => {
-      const itemTitle = item.title_en || item.title_id;
-      const colorText = item.color ? ` (${item.color})` : '';
-      return `${index + 1}. ${itemTitle}${colorText}\n   • Size: ${item.size}\n   • Qty: ${item.quantity} pcs @ IDR ${formatPrice(item.price)} = IDR ${formatPrice(item.price * item.quantity)}`;
-    }).join('\n');
+    const waRecipient = storeSettings?.whatsappNumber || '6281234567890';
+    const waUrl = buildWhatsAppUrl(waRecipient, rawMessage);
 
-    // Build clean professional WhatsApp message template in English
-    const rawMessage = `*NEW ORDER — ALFAREL.ID*
-Order ID: #${orderId}
-------------------------------------------
-*ORDERED ITEMS:*
-${itemsLines}
-
-------------------------------------------
-*PAYMENT SUMMARY:*
-• Total Items: ${items.reduce((s, i) => s + i.quantity, 0)} pcs
-• Subtotal: IDR ${formatPrice(subtotal)}
-• Shipping (${shippingRateLabels[shippingZone]}): IDR ${formatPrice(currentShippingCost)}
-• *TOTAL AMOUNT: IDR ${formatPrice(grandTotal)}*
-
-------------------------------------------
-*DELIVERY DETAILS:*
-• Customer Name: ${name}
-• WhatsApp Contact: ${phone}
-• Delivery Address: ${address}
-• City / District: ${city}
-• Preferred Courier: ${courier}
-• Special Notes: ${additionalNote || '-'}
-
-Please confirm product availability and provide payment details (Bank Transfer / QRIS). Thank you!`;
-
-    const cleanWaNumber = (storeSettings?.whatsappNumber || '6281234567890').replace(/\D/g, '');
-    const waUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(rawMessage)}`;
-
-    // Log order analytics to Supabase
+    // Record order analytics asynchronously (fire and forget)
     logOrder({
       order_code: orderId,
-      customer_name: name,
-      customer_phone: phone,
-      city: city,
-      courier: courier,
-      items_count: items.reduce((s, i) => s + i.quantity, 0),
+      customer_name: name.trim(),
+      customer_phone: phone.trim(),
+      city: city.trim(),
+      courier,
+      items_count: items.reduce((s, i) => s + (i.quantity || 1), 0),
       total_amount: grandTotal
     }).catch(err => console.warn('Order logging error:', err));
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      window.open(waUrl, '_blank');
-      setIsCheckoutOpen(false);
-    }, 400);
+    // Open WhatsApp synchronously in user gesture thread to prevent iOS Safari popup suppression
+    window.open(waUrl, '_blank');
+
+    clearCart();
+    setIsSubmitting(false);
+    setIsCheckoutOpen(false);
   };
 
   return (

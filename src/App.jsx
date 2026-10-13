@@ -37,7 +37,7 @@ export function MainStore() {
   const { addToCart } = useCart();
 
   const [products, setProducts] = useState(initialProducts);
-  const [categories] = useState(initialCategories);
+  const [categories, setCategories] = useState(initialCategories);
   const [storeSettings, setStoreSettings] = useState(initialStoreSettings);
 
   const [activeCategory, setActiveCategory] = useState('all');
@@ -146,10 +146,10 @@ export function MainStore() {
       // Keyword Search check
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
-        const title = (lang === 'en' ? item.title_en : item.title_id).toLowerCase();
-        const desc = (lang === 'en' ? item.description_en : item.description_id).toLowerCase();
-        const mat = (lang === 'en' ? item.material_en : item.material_id).toLowerCase();
-        const cat = item.category.toLowerCase();
+        const title = (lang === 'en' ? (item.title_en || item.title_id || '') : (item.title_id || item.title_en || '')).toLowerCase();
+        const desc = (lang === 'en' ? (item.description_en || item.description_id || '') : (item.description_id || item.description_en || '')).toLowerCase();
+        const mat = (lang === 'en' ? (item.material_en || item.material_id || '') : (item.material_id || item.material_en || '')).toLowerCase();
+        const cat = (item.category || '').toLowerCase();
 
         return (
           title.includes(query) ||

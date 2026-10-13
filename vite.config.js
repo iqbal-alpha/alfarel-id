@@ -10,5 +10,9 @@ export default defineConfig({
     watch: {
       ignored: ['**/node_modules/**', '**/.git/**']
     }
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom'
   }
 });
