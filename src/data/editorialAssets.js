@@ -1,6 +1,6 @@
 export const editorialAssets = {
   heroModel: '/images/editorial/hero-model.jpg',
-  heroCutout: '/images/editorial/hero-cutout.png?v=20261013-4',
+  heroCutout: '/images/editorial/hero-cutout.png?v=20261013-5',
   aboutModel: '/images/editorial/about-model.jpg',
   collection001: '/images/editorial/collection-001.jpg',
   collection002: '/images/editorial/collection-002.jpg',
