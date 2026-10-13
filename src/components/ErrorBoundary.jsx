@@ -16,6 +16,8 @@ export class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
+      const isDev = Boolean(import.meta.env?.DEV);
+
       return (
         <div style={{
           minHeight: '100vh',
@@ -26,29 +28,74 @@ export class ErrorBoundary extends React.Component {
           padding: '2rem',
           backgroundColor: '#0C131A',
           color: '#FFFFFF',
-          fontFamily: 'system-ui, sans-serif',
+          fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
           textAlign: 'center'
         }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#EE592B', marginBottom: '1rem' }}>
-            Oops! Something went wrong
+          <div style={{
+            fontSize: '0.8rem',
+            fontWeight: 800,
+            letterSpacing: '0.15em',
+            color: 'var(--bg-ticker)',
+            textTransform: 'uppercase',
+            marginBottom: '0.5rem'
+          }}>
+            ALFAREL.ID • COASTAL APPAREL
+          </div>
+          <h2 style={{
+            fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
+            fontWeight: 800,
+            color: '#FFFFFF',
+            marginBottom: '0.75rem'
+          }}>
+            A Temporary Breeze in the Current
           </h2>
-          <p style={{ maxWidth: '500px', opacity: 0.8, marginBottom: '1.5rem', lineHeight: 1.6 }}>
-            {this.state.error?.message || 'Failed to render store components.'}
+          <p style={{
+            maxWidth: '520px',
+            color: 'rgba(255, 255, 255, 0.7)',
+            marginBottom: '1.75rem',
+            lineHeight: 1.6,
+            fontSize: '0.95rem'
+          }}>
+            {isDev
+              ? (this.state.error?.message || 'An unexpected rendering error occurred.')
+              : 'We encountered a minor hiccup presenting this collection piece. Your cart items are saved locally.'}
           </p>
-          <button
-            onClick={() => window.location.reload()}
-            style={{
-              padding: '0.75rem 1.5rem',
-              borderRadius: '9999px',
-              backgroundColor: '#E3F934',
-              color: '#0C131A',
-              fontWeight: 800,
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            Reload Page
-          </button>
+
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                padding: '0.75rem 1.75rem',
+                borderRadius: '9999px',
+                backgroundColor: 'var(--bg-ticker)',
+                color: '#0C131A',
+                fontWeight: 800,
+                fontSize: '0.85rem',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              Reload Store
+            </button>
+            <button
+              onClick={() => {
+                this.setState({ hasError: false, error: null });
+                window.location.href = '/';
+              }}
+              style={{
+                padding: '0.75rem 1.75rem',
+                borderRadius: '9999px',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                color: '#FFFFFF',
+                fontWeight: 700,
+                fontSize: '0.85rem',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                cursor: 'pointer'
+              }}
+            >
+              Return Home
+            </button>
+          </div>
         </div>
       );
     }
