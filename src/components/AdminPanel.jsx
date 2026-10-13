@@ -13,14 +13,18 @@ import {
   Phone,
   Tag,
   Eye,
-  EyeOff
+  EyeOff,
+  ShoppingBag,
+  RefreshCw
 } from 'lucide-react';
 import {
   isSupabaseConfigured,
+  verifyAdminPin,
   createProduct as dbCreateProduct,
   updateProduct as dbUpdateProduct,
   deleteProduct as dbDeleteProduct,
-  updateStoreSettings as dbUpdateSettings
+  updateStoreSettings as dbUpdateSettings,
+  getOrderLogs
 } from '../lib/supabase';
 
 export const AdminPanel = ({
@@ -36,17 +40,35 @@ export const AdminPanel = ({
   const [pinInput, setPinInput] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pinError, setPinError] = useState(false);
-  const [activeTab, setActiveTab] = useState('products'); // 'products' or 'settings'
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [banner, setBanner] = useState(null); // { type: 'success' | 'error', text: '' }
+  const [activeTab, setActiveTab] = useState('products'); // 'products', 'orders', or 'settings'
+  const [orderLogs, setOrderLogs] = useState([]);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false);
+
+  const fetchOrders = async () => {
+    setIsLoadingOrders(true);
+    try {
+      const logs = await getOrderLogs(100);
+      setOrderLogs(logs || []);
+    } catch (err) {
+      console.error('Error fetching order logs:', err);
+    } finally {
+      setIsLoadingOrders(false);
+    }
+  };
 
   // New / Edit Product Form State
   const [isEditingProduct, setIsEditingProduct] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formTitleId, setFormTitleId] = useState('');
   const [formTitleEn, setFormTitleEn] = useState('');
+  const [formDescId, setFormDescId] = useState('');
+  const [formDescEn, setFormDescEn] = useState('');
   const [formCategory, setFormCategory] = useState('shirts');
   const [formPrice, setFormPrice] = useState('');
   const [formComparePrice, setFormComparePrice] = useState('');
-  const [formImageUrl, setFormImageUrl] = useState('');
+  const [formImages, setFormImages] = useState('');
   const [formStockStatus, setFormStockStatus] = useState('ready');
   const [formSizes, setFormSizes] = useState('S, M, L, XL');
 
@@ -56,52 +78,75 @@ export const AdminPanel = ({
   const [settingsBannerEn, setSettingsBannerEn] = useState(storeSettings?.announcement_en || '');
   const [settingsSaved, setSettingsSaved] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (pinInput === storeSettings.adminPin || pinInput === '1234') {
-      setIsAuthenticated(true);
-      setPinError(false);
-    } else {
+    setIsAuthenticating(true);
+    setPinError(false);
+    try {
+      const isValid = await verifyAdminPin(pinInput);
+      if (isValid) {
+        setIsAuthenticated(true);
+        setPinError(false);
+      } else {
+        setPinError(true);
+      }
+    } catch (err) {
+      console.error('Login verification error:', err);
       setPinError(true);
+    } finally {
+      setIsAuthenticating(false);
     }
   };
 
   const handleToggleActive = async (id) => {
+    const prevProducts = [...products];
     const target = products.find((p) => p.id === id);
-    const newActive = target ? !target.isActive : true;
+    if (!target) return;
+    const newActive = !target.isActive;
     setProducts((prev) =>
       prev.map((p) => (p.id === id ? { ...p, isActive: newActive } : p))
     );
     if (isSupabaseConfigured()) {
       try {
         await dbUpdateProduct(id, { is_active: newActive });
+        setBanner({ type: 'success', text: `Product visibility updated to ${newActive ? 'Active' : 'Hidden'}.` });
       } catch (err) {
         console.error('Failed to update active state in Supabase:', err);
+        setProducts(prevProducts); // Rollback
+        setBanner({ type: 'error', text: 'Failed to update visibility on server. Reverted changes.' });
       }
     }
   };
 
   const handleUpdateStock = async (id, newStatus) => {
+    const prevProducts = [...products];
     setProducts((prev) =>
       prev.map((p) => (p.id === id ? { ...p, stockStatus: newStatus } : p))
     );
     if (isSupabaseConfigured()) {
       try {
         await dbUpdateProduct(id, { stock_status: newStatus });
+        setBanner({ type: 'success', text: 'Stock status updated successfully.' });
       } catch (err) {
         console.error('Failed to update stock status in Supabase:', err);
+        setProducts(prevProducts); // Rollback
+        setBanner({ type: 'error', text: 'Failed to update stock status on server. Reverted changes.' });
       }
     }
   };
 
   const handleDeleteProduct = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
+      const prevProducts = [...products];
       setProducts((prev) => prev.filter((p) => p.id !== id));
       if (isSupabaseConfigured()) {
         try {
           await dbDeleteProduct(id);
+          setBanner({ type: 'success', text: 'Product deleted successfully.' });
         } catch (err) {
           console.error('Failed to delete product in Supabase:', err);
+          setProducts(prevProducts); // Rollback
+          setBanner({ type: 'error', text: 'Failed to delete product from server. Product restored.' });
         }
       }
     }
@@ -111,10 +156,12 @@ export const AdminPanel = ({
     setEditingId(null);
     setFormTitleId('');
     setFormTitleEn('');
+    setFormDescId('');
+    setFormDescEn('');
     setFormCategory('shirts');
     setFormPrice('');
     setFormComparePrice('');
-    setFormImageUrl('');
+    setFormImages('');
     setFormStockStatus('ready');
     setFormSizes('S, M, L, XL');
     setIsEditingProduct(true);
@@ -122,13 +169,15 @@ export const AdminPanel = ({
 
   const handleOpenEdit = (p) => {
     setEditingId(p.id);
-    setFormTitleId(p.title_id);
-    setFormTitleEn(p.title_en);
-    setFormCategory(p.category);
-    setFormPrice(p.price);
+    setFormTitleId(p.title_id || '');
+    setFormTitleEn(p.title_en || '');
+    setFormDescId(p.description_id || '');
+    setFormDescEn(p.description_en || '');
+    setFormCategory(p.category || 'shirts');
+    setFormPrice(p.price || '');
     setFormComparePrice(p.compareAtPrice || '');
-    setFormImageUrl(p.images[0] || '');
-    setFormStockStatus(p.stockStatus);
+    setFormImages((p.images || []).join('\n'));
+    setFormStockStatus(p.stockStatus || 'ready');
     setFormSizes((p.sizes || []).join(', '));
     setIsEditingProduct(true);
   };
@@ -140,21 +189,29 @@ export const AdminPanel = ({
       .map((s) => s.trim())
       .filter(Boolean);
 
+    const parsedImages = formImages
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean);
+
     const fallbackImg =
-      formImageUrl ||
       'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80';
+    const finalImages = parsedImages.length > 0 ? parsedImages : [fallbackImg];
 
     if (editingId) {
       // Update
+      const prevProducts = [...products];
       const updatedProduct = {
         title_id: formTitleId,
         title_en: formTitleEn || formTitleId,
+        description_id: formDescId,
+        description_en: formDescEn || formDescId,
         category: formCategory,
         price: Number(formPrice) || 120000,
         compareAtPrice: formComparePrice ? Number(formComparePrice) : null,
-        images: [fallbackImg],
+        images: finalImages,
         stockStatus: formStockStatus,
-        sizes: parsedSizes
+        sizes: parsedSizes.length > 0 ? parsedSizes : ['S', 'M', 'L', 'XL']
       };
 
       setProducts((prev) =>
@@ -166,14 +223,20 @@ export const AdminPanel = ({
           await dbUpdateProduct(editingId, {
             title_id: updatedProduct.title_id,
             title_en: updatedProduct.title_en,
+            description_id: updatedProduct.description_id,
+            description_en: updatedProduct.description_en,
+            category: updatedProduct.category,
             price: updatedProduct.price,
             compare_at_price: updatedProduct.compareAtPrice,
             images: updatedProduct.images,
             stock_status: updatedProduct.stockStatus,
             available_sizes: updatedProduct.sizes
           });
+          setBanner({ type: 'success', text: 'Product updated successfully.' });
         } catch (err) {
           console.error('Failed to update product in Supabase:', err);
+          setProducts(prevProducts); // Rollback
+          setBanner({ type: 'error', text: 'Failed to update product on server. Reverted changes.' });
         }
       }
     } else {
@@ -184,11 +247,11 @@ export const AdminPanel = ({
         category: formCategory,
         title_id: formTitleId,
         title_en: formTitleEn || formTitleId,
-        description_id: 'Koleksi apparel pantai santai AlfaREL.ID.',
-        description_en: 'Relaxed coastal beach apparel from AlfaREL.ID.',
+        description_id: formDescId || 'Relaxed coastal beach apparel from AlfaREL.ID.',
+        description_en: formDescEn || 'Relaxed coastal beach apparel from AlfaREL.ID.',
         price: Number(formPrice) || 120000,
         compareAtPrice: formComparePrice ? Number(formComparePrice) : null,
-        images: [fallbackImg],
+        images: finalImages,
         sizes: parsedSizes.length > 0 ? parsedSizes : ['S', 'M', 'L', 'XL'],
         colors: [],
         stockStatus: formStockStatus,
@@ -211,6 +274,7 @@ export const AdminPanel = ({
             title_en: newProd.title_en,
             description_id: newProd.description_id,
             description_en: newProd.description_en,
+            category: newProd.category,
             price: newProd.price,
             compare_at_price: newProd.compareAtPrice,
             images: newProd.images,
@@ -224,9 +288,12 @@ export const AdminPanel = ({
             setProducts((prev) =>
               prev.map((p) => (p.id === tempId ? { ...p, id: dbRes.id } : p))
             );
+            setBanner({ type: 'success', text: 'Product created successfully.' });
           }
         } catch (err) {
           console.error('Failed to create product in Supabase:', err);
+          setProducts((prev) => prev.filter((p) => p.id !== tempId)); // Rollback
+          setBanner({ type: 'error', text: 'Failed to create product on server. Product removed.' });
         }
       }
     }
@@ -236,13 +303,13 @@ export const AdminPanel = ({
 
   const handleSaveSettings = async (e) => {
     e.preventDefault();
+    const prevSettings = { ...storeSettings };
     setStoreSettings((prev) => ({
       ...prev,
       whatsappNumber: settingsWa,
       announcement_id: settingsBannerId,
       announcement_en: settingsBannerEn
     }));
-    setSettingsSaved(true);
 
     if (isSupabaseConfigured()) {
       try {
@@ -251,12 +318,17 @@ export const AdminPanel = ({
           announcement_id: settingsBannerId,
           announcement_en: settingsBannerEn
         });
+        setSettingsSaved(true);
+        setTimeout(() => setSettingsSaved(false), 2000);
       } catch (err) {
         console.error('Failed to update settings in Supabase:', err);
+        setStoreSettings(prevSettings);
+        setBanner({ type: 'error', text: 'Failed to update store settings on server.' });
       }
+    } else {
+      setSettingsSaved(true);
+      setTimeout(() => setSettingsSaved(false), 2000);
     }
-
-    setTimeout(() => setSettingsSaved(false), 2000);
   };
 
   const formatPrice = (num) => new Intl.NumberFormat('id-ID').format(num);
@@ -318,7 +390,8 @@ export const AdminPanel = ({
                 maxLength={8}
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
-                placeholder="Demo PIN: 1234"
+                placeholder="••••••••"
+                disabled={isAuthenticating}
                 style={{
                   width: '100%',
                   padding: '0.75rem',
@@ -338,8 +411,13 @@ export const AdminPanel = ({
               )}
             </div>
 
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem' }}>
-              <span>{t('admin_pin_btn')}</span>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isAuthenticating}
+              style={{ width: '100%', padding: '0.75rem' }}
+            >
+              <span>{isAuthenticating ? 'Memverifikasi...' : t('admin_pin_btn')}</span>
             </button>
           </form>
 
@@ -366,6 +444,32 @@ export const AdminPanel = ({
   return (
     <div style={{ padding: '2rem 0 4rem' }}>
       <div className="container">
+        {banner && (
+          <div
+            style={{
+              padding: '0.75rem 1rem',
+              borderRadius: 'var(--radius-sm)',
+              marginBottom: '1rem',
+              backgroundColor: banner.type === 'error' ? 'var(--badge-sold-out-bg)' : 'var(--badge-ready-bg)',
+              color: banner.type === 'error' ? 'var(--badge-sold-out)' : 'var(--badge-ready)',
+              border: `1px solid ${banner.type === 'error' ? 'var(--badge-sold-out)' : 'var(--badge-ready)'}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              fontSize: '0.85rem',
+              fontWeight: 600
+            }}
+          >
+            <span>{banner.text}</span>
+            <button
+              onClick={() => setBanner(null)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit' }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        )}
+
         {/* Admin Header */}
         <div style={{
           display: 'flex',
@@ -410,7 +514,7 @@ export const AdminPanel = ({
           </div>
 
           {/* Navigation Tabs */}
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             <button
               onClick={() => setActiveTab('products')}
               style={{
@@ -423,6 +527,22 @@ export const AdminPanel = ({
               }}
             >
               {t('admin_products_tab')} ({products.length})
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('orders');
+                fetchOrders();
+              }}
+              style={{
+                padding: '0.55rem 1rem',
+                borderRadius: 'var(--radius-full)',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                backgroundColor: activeTab === 'orders' ? 'var(--color-primary)' : 'var(--bg-subtle)',
+                color: activeTab === 'orders' ? 'var(--text-white)' : 'var(--text-secondary)'
+              }}
+            >
+              {t('admin_orders_tab')} {orderLogs.length > 0 ? `(${orderLogs.length})` : ''}
             </button>
             <button
               onClick={() => setActiveTab('settings')}
@@ -683,6 +803,118 @@ export const AdminPanel = ({
           </div>
         )}
 
+        {/* TAB 3: ORDER LOGS */}
+        {activeTab === 'orders' && (
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.15rem', color: 'var(--text-primary)' }}>
+                  Log Transaksi WhatsApp Checkout
+                </h3>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+                  Catatan pesanan otomatis yang dikirim pembeli via WhatsApp.
+                </p>
+              </div>
+              <button
+                onClick={fetchOrders}
+                disabled={isLoadingOrders}
+                className="btn btn-secondary"
+                style={{ padding: '0.5rem 0.9rem', fontSize: '0.8125rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+              >
+                <RefreshCw size={14} className={isLoadingOrders ? 'spin' : ''} />
+                <span>{isLoadingOrders ? 'Memuat...' : 'Segarkan Data'}</span>
+              </button>
+            </div>
+
+            {orderLogs.length === 0 ? (
+              <div style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--bg-muted)',
+                padding: '3rem 2rem',
+                textAlign: 'center'
+              }}>
+                <ShoppingBag size={40} color="var(--text-tertiary)" style={{ margin: '0 auto 1rem', display: 'block' }} />
+                <h4 style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                  Belum Ada Pesanan Masuk
+                </h4>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', maxWidth: '400px', margin: '0 auto' }}>
+                  Setiap kali pembeli menyelesaikan checkout di website dan membuka WhatsApp, data pesanan otomatis tersimpan di Supabase alfarel_order_logs.
+                </p>
+              </div>
+            ) : (
+              <div style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--bg-muted)',
+                overflow: 'hidden',
+                boxShadow: 'var(--shadow-sm)'
+              }}>
+                <div style={{ overflowX: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.8125rem' }}>
+                    <thead>
+                      <tr style={{ backgroundColor: 'var(--bg-subtle)', borderBottom: '1px solid var(--bg-muted)' }}>
+                        <th style={{ padding: '0.75rem 1rem', fontWeight: 700, color: 'var(--text-primary)' }}>Kode Order</th>
+                        <th style={{ padding: '0.75rem 1rem', fontWeight: 700, color: 'var(--text-primary)' }}>Waktu</th>
+                        <th style={{ padding: '0.75rem 1rem', fontWeight: 700, color: 'var(--text-primary)' }}>Pelanggan</th>
+                        <th style={{ padding: '0.75rem 1rem', fontWeight: 700, color: 'var(--text-primary)' }}>Kota & Kurir</th>
+                        <th style={{ padding: '0.75rem 1rem', fontWeight: 700, color: 'var(--text-primary)', textAlign: 'center' }}>Item</th>
+                        <th style={{ padding: '0.75rem 1rem', fontWeight: 700, color: 'var(--text-primary)', textAlign: 'right' }}>Total Tagihan</th>
+                        <th style={{ padding: '0.75rem 1rem', fontWeight: 700, color: 'var(--text-primary)', textAlign: 'center' }}>WhatsApp</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orderLogs.map((log) => {
+                        const cleanPhone = (log.customer_phone || '').replace(/\D/g, '');
+                        const waDirectUrl = cleanPhone ? `https://wa.me/${cleanPhone.startsWith('0') ? '62' + cleanPhone.slice(1) : cleanPhone}` : null;
+                        return (
+                          <tr key={log.id || log.order_code} style={{ borderBottom: '1px solid var(--bg-muted)' }}>
+                            <td style={{ padding: '0.85rem 1rem', fontWeight: 700, color: 'var(--color-primary)' }}>
+                              {log.order_code}
+                            </td>
+                            <td style={{ padding: '0.85rem 1rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
+                              {log.created_at ? new Date(log.created_at).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }) : '-'}
+                            </td>
+                            <td style={{ padding: '0.85rem 1rem' }}>
+                              <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{log.customer_name || '-'}</div>
+                              <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{log.customer_phone || '-'}</div>
+                            </td>
+                            <td style={{ padding: '0.85rem 1rem', color: 'var(--text-secondary)' }}>
+                              <div>{log.city || '-'}</div>
+                              <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{log.courier || '-'}</div>
+                            </td>
+                            <td style={{ padding: '0.85rem 1rem', textAlign: 'center', fontWeight: 600 }}>
+                              {log.items_count} pcs
+                            </td>
+                            <td style={{ padding: '0.85rem 1rem', textAlign: 'right', fontWeight: 700, color: 'var(--text-primary)' }}>
+                              Rp {new Intl.NumberFormat('id-ID').format(log.total_amount)}
+                            </td>
+                            <td style={{ padding: '0.85rem 1rem', textAlign: 'center' }}>
+                              {waDirectUrl && (
+                                <a
+                                  href={waDirectUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="btn btn-secondary"
+                                  style={{ padding: '0.35rem 0.65rem', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}
+                                  title="Chat Pelanggan di WhatsApp"
+                                >
+                                  <Phone size={12} />
+                                  <span>Chat</span>
+                                </a>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* MODAL: ADD / EDIT PRODUCT */}
         {isEditingProduct && (
           <div className="overlay" onClick={() => setIsEditingProduct(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', zIndex: 160 }}>
@@ -736,6 +968,32 @@ export const AdminPanel = ({
                     onChange={(e) => setFormTitleEn(e.target.value)}
                     placeholder="Contoh: Uluwatu Linen Beach Shirt"
                     style={{ width: '100%', padding: '0.65rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--bg-muted)' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.3rem' }}>
+                    Deskripsi Produk (Bahasa Indonesia)
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={formDescId}
+                    onChange={(e) => setFormDescId(e.target.value)}
+                    placeholder="Contoh: Kemeja santai dengan material katun linen premium..."
+                    style={{ width: '100%', padding: '0.65rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--bg-muted)', fontFamily: 'inherit', resize: 'vertical' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.3rem' }}>
+                    Deskripsi Produk (English)
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={formDescEn}
+                    onChange={(e) => setFormDescEn(e.target.value)}
+                    placeholder="Example: Relaxed fit shirt crafted from breathable cotton-linen..."
+                    style={{ width: '100%', padding: '0.65rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--bg-muted)', fontFamily: 'inherit', resize: 'vertical' }}
                   />
                 </div>
 
@@ -804,14 +1062,14 @@ export const AdminPanel = ({
 
                 <div>
                   <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.3rem' }}>
-                    URL Gambar Produk
+                    URL Gambar Produk (Satu URL per baris)
                   </label>
-                  <input
-                    type="url"
-                    value={formImageUrl}
-                    onChange={(e) => setFormImageUrl(e.target.value)}
-                    placeholder="https://images.unsplash.com/..."
-                    style={{ width: '100%', padding: '0.65rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--bg-muted)' }}
+                  <textarea
+                    rows={3}
+                    value={formImages}
+                    onChange={(e) => setFormImages(e.target.value)}
+                    placeholder="https://images.unsplash.com/...&#10;https://images.unsplash.com/..."
+                    style={{ width: '100%', padding: '0.65rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--bg-muted)', fontFamily: 'inherit', resize: 'vertical' }}
                   />
                 </div>
 
