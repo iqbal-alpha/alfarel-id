@@ -15,6 +15,13 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react';
+import {
+  isSupabaseConfigured,
+  createProduct as dbCreateProduct,
+  updateProduct as dbUpdateProduct,
+  deleteProduct as dbDeleteProduct,
+  updateStoreSettings as dbUpdateSettings
+} from '../lib/supabase';
 
 export const AdminPanel = ({
   products,
@@ -59,21 +66,44 @@ export const AdminPanel = ({
     }
   };
 
-  const handleToggleActive = (id) => {
+  const handleToggleActive = async (id) => {
+    const target = products.find((p) => p.id === id);
+    const newActive = target ? !target.isActive : true;
     setProducts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, isActive: !p.isActive } : p))
+      prev.map((p) => (p.id === id ? { ...p, isActive: newActive } : p))
     );
+    if (isSupabaseConfigured()) {
+      try {
+        await dbUpdateProduct(id, { is_active: newActive });
+      } catch (err) {
+        console.error('Failed to update active state in Supabase:', err);
+      }
+    }
   };
 
-  const handleUpdateStock = (id, newStatus) => {
+  const handleUpdateStock = async (id, newStatus) => {
     setProducts((prev) =>
       prev.map((p) => (p.id === id ? { ...p, stockStatus: newStatus } : p))
     );
+    if (isSupabaseConfigured()) {
+      try {
+        await dbUpdateProduct(id, { stock_status: newStatus });
+      } catch (err) {
+        console.error('Failed to update stock status in Supabase:', err);
+      }
+    }
   };
 
-  const handleDeleteProduct = (id) => {
+  const handleDeleteProduct = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       setProducts((prev) => prev.filter((p) => p.id !== id));
+      if (isSupabaseConfigured()) {
+        try {
+          await dbDeleteProduct(id);
+        } catch (err) {
+          console.error('Failed to delete product in Supabase:', err);
+        }
+      }
     }
   };
 
@@ -103,7 +133,7 @@ export const AdminPanel = ({
     setIsEditingProduct(true);
   };
 
-  const handleSaveProduct = (e) => {
+  const handleSaveProduct = async (e) => {
     e.preventDefault();
     const parsedSizes = formSizes
       .split(',')
@@ -116,27 +146,41 @@ export const AdminPanel = ({
 
     if (editingId) {
       // Update
+      const updatedProduct = {
+        title_id: formTitleId,
+        title_en: formTitleEn || formTitleId,
+        category: formCategory,
+        price: Number(formPrice) || 120000,
+        compareAtPrice: formComparePrice ? Number(formComparePrice) : null,
+        images: [fallbackImg],
+        stockStatus: formStockStatus,
+        sizes: parsedSizes
+      };
+
       setProducts((prev) =>
-        prev.map((p) =>
-          p.id === editingId
-            ? {
-                ...p,
-                title_id: formTitleId || p.title_id,
-                title_en: formTitleEn || formTitleId || p.title_en,
-                category: formCategory,
-                price: Number(formPrice) || p.price,
-                compareAtPrice: formComparePrice ? Number(formComparePrice) : null,
-                images: [fallbackImg],
-                stockStatus: formStockStatus,
-                sizes: parsedSizes
-              }
-            : p
-        )
+        prev.map((p) => (p.id === editingId ? { ...p, ...updatedProduct } : p))
       );
+
+      if (isSupabaseConfigured()) {
+        try {
+          await dbUpdateProduct(editingId, {
+            title_id: updatedProduct.title_id,
+            title_en: updatedProduct.title_en,
+            price: updatedProduct.price,
+            compare_at_price: updatedProduct.compareAtPrice,
+            images: updatedProduct.images,
+            stock_status: updatedProduct.stockStatus,
+            available_sizes: updatedProduct.sizes
+          });
+        } catch (err) {
+          console.error('Failed to update product in Supabase:', err);
+        }
+      }
     } else {
       // Add new
+      const tempId = `prod-${Date.now()}`;
       const newProd = {
-        id: `prod-${Date.now()}`,
+        id: tempId,
         category: formCategory,
         title_id: formTitleId,
         title_en: formTitleEn || formTitleId,
@@ -151,13 +195,46 @@ export const AdminPanel = ({
         isFeatured: false,
         isActive: true
       };
+
       setProducts((prev) => [newProd, ...prev]);
+
+      if (isSupabaseConfigured()) {
+        try {
+          const generatedSlug = (formTitleEn || formTitleId)
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '') + '-' + Date.now().toString().slice(-4);
+
+          const dbRes = await dbCreateProduct({
+            slug: generatedSlug,
+            title_id: newProd.title_id,
+            title_en: newProd.title_en,
+            description_id: newProd.description_id,
+            description_en: newProd.description_en,
+            price: newProd.price,
+            compare_at_price: newProd.compareAtPrice,
+            images: newProd.images,
+            available_sizes: newProd.sizes,
+            stock_status: newProd.stockStatus,
+            is_active: true,
+            is_featured: false
+          });
+
+          if (dbRes && dbRes.id) {
+            setProducts((prev) =>
+              prev.map((p) => (p.id === tempId ? { ...p, id: dbRes.id } : p))
+            );
+          }
+        } catch (err) {
+          console.error('Failed to create product in Supabase:', err);
+        }
+      }
     }
 
     setIsEditingProduct(false);
   };
 
-  const handleSaveSettings = (e) => {
+  const handleSaveSettings = async (e) => {
     e.preventDefault();
     setStoreSettings((prev) => ({
       ...prev,
@@ -166,6 +243,19 @@ export const AdminPanel = ({
       announcement_en: settingsBannerEn
     }));
     setSettingsSaved(true);
+
+    if (isSupabaseConfigured()) {
+      try {
+        await dbUpdateSettings({
+          whatsapp_number: settingsWa,
+          announcement_id: settingsBannerId,
+          announcement_en: settingsBannerEn
+        });
+      } catch (err) {
+        console.error('Failed to update settings in Supabase:', err);
+      }
+    }
+
     setTimeout(() => setSettingsSaved(false), 2000);
   };
 

@@ -23,6 +23,12 @@ import { FloatingCartButton } from './components/FloatingCartButton';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AdminPanel } from './components/AdminPanel';
+import {
+  isSupabaseConfigured,
+  getCategories,
+  getProducts,
+  getStoreSettings
+} from './lib/supabase';
 
 import { Sparkles, Search } from 'lucide-react';
 
@@ -38,6 +44,77 @@ export function MainStore() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isAdminView, setIsAdminView] = useState(false);
+  const [isDbLoading, setIsDbLoading] = useState(false);
+
+  // Live Supabase Data Fetching
+  React.useEffect(() => {
+    async function loadLiveData() {
+      if (!isSupabaseConfigured()) return;
+      try {
+        setIsDbLoading(true);
+        const [dbCategories, dbProducts, dbSettings] = await Promise.all([
+          getCategories(),
+          getProducts({ includeInactive: true }),
+          getStoreSettings()
+        ]);
+
+        if (dbCategories && dbCategories.length > 0) {
+          const formattedCats = [
+            { id: 'all', key: 'cat_all', name_id: 'All Collections', name_en: 'All Collections', name: 'All Collections' },
+            ...dbCategories.map(c => ({
+              id: c.slug,
+              key: `cat_${c.slug}`,
+              name_id: c.name_id,
+              name_en: c.name_en,
+              name: c.name_en
+            }))
+          ];
+          setCategories(formattedCats);
+        }
+
+        if (dbProducts && dbProducts.length > 0) {
+          const formattedProducts = dbProducts.map(p => ({
+            id: p.id,
+            category: p.alfarel_categories?.slug || 'shirts',
+            title_id: p.title_id,
+            title_en: p.title_en,
+            description_id: p.description_id,
+            description_en: p.description_en,
+            material_id: p.material_id,
+            material_en: p.material_en,
+            fit_id: p.fit_id,
+            fit_en: p.fit_en,
+            price: Number(p.price),
+            compareAtPrice: p.compare_at_price ? Number(p.compare_at_price) : null,
+            images: p.images && p.images.length > 0 ? p.images : ['/images/products/bali-breeze-shirt.jpg'],
+            sizes: p.available_sizes || ['S', 'M', 'L', 'XL'],
+            colors: p.available_colors || [],
+            stockStatus: p.stock_status || 'ready',
+            isFeatured: Boolean(p.is_featured),
+            isActive: Boolean(p.is_active)
+          }));
+          setProducts(formattedProducts);
+        }
+
+        if (dbSettings) {
+          setStoreSettings({
+            storeName: dbSettings.store_name,
+            whatsappNumber: dbSettings.whatsapp_number,
+            announcement_id: dbSettings.announcement_id,
+            announcement_en: dbSettings.announcement_en,
+            isStoreOpen: dbSettings.is_store_open,
+            adminPin: dbSettings.admin_pin_hash || '1234'
+          });
+        }
+      } catch (err) {
+        console.warn('Notice: Using local catalog fallback, Supabase sync note:', err.message);
+      } finally {
+        setIsDbLoading(false);
+      }
+    }
+
+    loadLiveData();
+  }, []);
 
   React.useEffect(() => {
     if (window.location.hash === '#admin' || window.location.pathname === '/admin') {

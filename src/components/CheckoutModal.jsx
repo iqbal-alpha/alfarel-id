@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useCart } from '../context/CartContext';
 import { X, MessageCircle, Truck, MapPin, User, Phone, CheckCircle2 } from 'lucide-react';
+import { logOrder } from '../lib/supabase';
 
 export const CheckoutModal = ({ storeSettings }) => {
   const { lang, t } = useLanguage();
@@ -90,6 +91,17 @@ Please confirm product availability and provide payment details (Bank Transfer /
 
     const cleanWaNumber = (storeSettings?.whatsappNumber || '6281234567890').replace(/\D/g, '');
     const waUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(rawMessage)}`;
+
+    // Log order analytics to Supabase
+    logOrder({
+      order_code: orderId,
+      customer_name: name,
+      customer_phone: phone,
+      city: city,
+      courier: courier,
+      items_count: items.reduce((s, i) => s + i.quantity, 0),
+      total_amount: grandTotal
+    }).catch(err => console.warn('Order logging error:', err));
 
     setTimeout(() => {
       setIsSubmitting(false);
