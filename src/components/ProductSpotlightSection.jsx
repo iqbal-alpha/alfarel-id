@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
 import { editorialAssets } from '../data/editorialAssets';
 import { useCart } from '../context/CartContext';
-import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Check } from 'lucide-react';
 
 export const ProductSpotlightSection = ({ products = [] }) => {
   const { addToCart } = useCart();
 
-  // Find a flagship shirt product or fallback
-  const flagshipProduct = (products && products.length > 0)
-    ? (products.find(p => p.id === 'prod-02' || p.category === 'shirts') || products[0])
-    : null;
+  // Filter active products
+  const activeProducts = products.filter((p) => p.isActive !== false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAdded, setIsAdded] = useState(false);
+
+  const currentProduct = activeProducts.length > 0
+    ? activeProducts[currentIndex % activeProducts.length]
+    : {
+        id: 'prod-02',
+        title_en: 'Top Resort Sleeve Shirt',
+        title_id: 'Kemeja Pantai Resort Lengan Pendek',
+        price: 189000,
+        compareAtPrice: 249000,
+        sizes: ['S', 'M', 'L', 'XL'],
+        images: [editorialAssets.spotlightModel]
+      };
 
   const colors = [
     { name: 'Sunset Terracotta', hex: '#EE592B' },
@@ -18,12 +30,41 @@ export const ProductSpotlightSection = ({ products = [] }) => {
   ];
 
   const [selectedColor, setSelectedColor] = useState(colors[0]);
+  const [selectedSize, setSelectedSize] = useState(() => (currentProduct.sizes && currentProduct.sizes[0]) || 'L');
+
+  // Sync size when currentProduct changes
+  React.useEffect(() => {
+    if (currentProduct.sizes && currentProduct.sizes.length > 0) {
+      if (!currentProduct.sizes.includes(selectedSize)) {
+        setSelectedSize(currentProduct.sizes[0]);
+      }
+    }
+  }, [currentProduct.id]);
+
+  const handlePrev = () => {
+    if (activeProducts.length <= 1) return;
+    setCurrentIndex((prev) => (prev - 1 + activeProducts.length) % activeProducts.length);
+  };
+
+  const handleNext = () => {
+    if (activeProducts.length <= 1) return;
+    setCurrentIndex((prev) => (prev + 1) % activeProducts.length);
+  };
 
   const handleOrderNow = () => {
-    if (flagshipProduct) {
-      addToCart(flagshipProduct, 'L', selectedColor.name, 1);
+    if (currentProduct) {
+      addToCart(currentProduct, selectedSize, selectedColor.name, 1);
+      setIsAdded(true);
+      setTimeout(() => setIsAdded(false), 1500);
     }
   };
+
+  const formatPrice = (price) => {
+    return 'IDR ' + new Intl.NumberFormat('en-US').format(price);
+  };
+
+  const title = currentProduct.title_en || currentProduct.title_id || 'Top Resort Sleeve Shirt';
+  const displayImage = currentProduct.images?.[0] || editorialAssets.spotlightModel;
 
   return (
     <section style={{
@@ -39,7 +80,7 @@ export const ProductSpotlightSection = ({ products = [] }) => {
         margin: '0 auto',
         position: 'relative'
       }}>
-        {/* Top Metadata Row: Rating & Title on Left, Price on Right (Zero overlapping text) */}
+        {/* Top Metadata Row: Title on Left, Price & Switchers on Right */}
         <div style={{
           position: 'relative',
           display: 'flex',
@@ -49,7 +90,7 @@ export const ProductSpotlightSection = ({ products = [] }) => {
           flexWrap: 'wrap',
           gap: '1.5rem'
         }}>
-          {/* Left: Star Reviews & Title */}
+          {/* Left: Authentic Badge & Title */}
           <div>
             <div style={{
               display: 'flex',
@@ -61,18 +102,22 @@ export const ProductSpotlightSection = ({ products = [] }) => {
               fontWeight: 800,
               letterSpacing: '0.08em'
             }}>
-              <span>★★★★★</span>
-              <span style={{ color: '#0C131A', marginLeft: '0.3rem' }}>PROPER REVIEWS [4.9]</span>
+              <span>FLAGSHIP HIGHLIGHT</span>
+              <span style={{ color: '#0C131A', marginLeft: '0.3rem' }}>
+                [{currentIndex + 1} OF {Math.max(activeProducts.length, 1)}]
+              </span>
             </div>
 
             <h2 className="font-impact" style={{
-              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-              lineHeight: 0.9,
+              fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
+              lineHeight: 0.95,
               letterSpacing: '0.02em',
               margin: 0,
-              color: '#0C131A'
+              color: '#0C131A',
+              maxWidth: '650px',
+              textTransform: 'uppercase'
             }}>
-              TOP RESORT<br />SLEEVE SHIRT
+              {title}
             </h2>
           </div>
 
@@ -83,51 +128,73 @@ export const ProductSpotlightSection = ({ products = [] }) => {
               fontWeight: 900,
               color: '#0C131A'
             }}>
-              IDR 189,000
+              {formatPrice(currentProduct.price)}
             </div>
-            <div style={{
-              fontSize: '0.85rem',
-              color: 'rgba(12, 19, 26, 0.4)',
-              textDecoration: 'line-through',
-              marginBottom: '0.85rem'
-            }}>
-              IDR 249,000
-            </div>
+            {currentProduct.compareAtPrice && (
+              <div style={{
+                fontSize: '0.85rem',
+                color: 'rgba(12, 19, 26, 0.4)',
+                textDecoration: 'line-through',
+                marginBottom: '0.85rem'
+              }}>
+                {formatPrice(currentProduct.compareAtPrice)}
+              </div>
+            )}
 
             <div style={{
               display: 'inline-flex',
-              gap: '0.5rem'
+              gap: '0.5rem',
+              marginTop: currentProduct.compareAtPrice ? 0 : '0.5rem'
             }}>
-              <div style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                backgroundColor: 'rgba(12, 19, 26, 0.08)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer'
-              }}>
-                <ChevronLeft size={18} />
-              </div>
-              <div style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                backgroundColor: 'var(--bg-sunset)',
-                color: '#FFFFFF',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer'
-              }}>
-                <ChevronRight size={18} />
-              </div>
+              <button
+                type="button"
+                onClick={handlePrev}
+                aria-label="Previous product"
+                style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(12, 19, 26, 0.08)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  border: 'none',
+                  color: '#0C131A',
+                  transition: 'background-color var(--transition-fast)'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(12, 19, 26, 0.16)'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(12, 19, 26, 0.08)'}
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Next product"
+                style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--bg-sunset)',
+                  color: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  border: 'none',
+                  transition: 'opacity var(--transition-fast)'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              >
+                <ChevronRight size={20} />
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Center: Model Sitting on Beach Lounge Chair (Clean container, no text behind it) */}
+        {/* Center: Image Presentation Container */}
         <div style={{
           position: 'relative',
           display: 'flex',
@@ -144,8 +211,8 @@ export const ProductSpotlightSection = ({ products = [] }) => {
             backgroundColor: '#F3EFE8'
           }}>
             <img
-              src={editorialAssets.spotlightModel}
-              alt="Top Sleeve Resort Shirt Spotlight"
+              src={displayImage}
+              alt={title}
               style={{
                 width: '100%',
                 maxHeight: '520px',
@@ -157,7 +224,7 @@ export const ProductSpotlightSection = ({ products = [] }) => {
           </div>
         </div>
 
-        {/* Bottom Row: Description Left, Color Swatches Center, ORDER NOW Right */}
+        {/* Bottom Row: Description Left, Swatches & Sizes Center, ORDER NOW Right */}
         <div style={{
           position: 'relative',
           display: 'grid',
@@ -180,7 +247,7 @@ export const ProductSpotlightSection = ({ products = [] }) => {
               textTransform: 'uppercase',
               margin: '0 0 0.4rem 0'
             }}>
-              OUR LATEST RESORT SHIRT IS A PERFECT BLEND OF TIMELESS ELEGANCE AND TROPICAL FREEDOM.
+              {currentProduct.description_en || currentProduct.description_id || 'OUR LATEST RESORT SHIRT IS A PERFECT BLEND OF TIMELESS ELEGANCE AND TROPICAL FREEDOM.'}
             </p>
             <span style={{
               fontSize: '0.75rem',
@@ -188,60 +255,89 @@ export const ProductSpotlightSection = ({ products = [] }) => {
               color: 'var(--bg-sunset)',
               letterSpacing: '0.08em'
             }}>
-              100% PURE WASHED LINEN // SOFT-DRAPE
+              {currentProduct.material_en || currentProduct.material_id || '100% PURE WASHED LINEN // SOFT-DRAPE'}
             </span>
           </div>
 
-          {/* Color Swatch Picker */}
+          {/* Configurator: Swatches + Size Picker */}
           <div style={{
-            gridColumn: 'span 3',
+            gridColumn: 'span 4',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.5rem'
+            gap: '0.75rem'
           }} className="spotlight-col-swatch">
-            <div style={{
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              letterSpacing: '0.08em',
-              color: 'rgba(12, 19, 26, 0.6)'
-            }}>
-              COLOR: <span style={{ color: '#0C131A' }}>{selectedColor.name.toUpperCase()}</span>
+            {/* Color selector */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.08em', color: 'rgba(12, 19, 26, 0.6)' }}>
+                COLOR:
+              </span>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                {colors.map((c) => {
+                  const isSelected = selectedColor.name === c.name;
+                  return (
+                    <button
+                      key={c.name}
+                      type="button"
+                      onClick={() => setSelectedColor(c)}
+                      aria-label={c.name}
+                      style={{
+                        width: '26px',
+                        height: '26px',
+                        borderRadius: '50%',
+                        backgroundColor: c.hex,
+                        border: isSelected ? '2px solid #0C131A' : '1px solid rgba(0,0,0,0.2)',
+                        boxShadow: isSelected ? '0 0 0 2px rgba(238, 89, 43, 0.35)' : 'none',
+                        cursor: 'pointer',
+                        transform: isSelected ? 'scale(1.15)' : 'scale(1)',
+                        transition: 'all var(--transition-fast)'
+                      }}
+                      title={c.name}
+                    />
+                  );
+                })}
+              </div>
             </div>
-            <div style={{
-              display: 'flex',
-              gap: '0.75rem',
-              alignItems: 'center'
-            }}>
-              {colors.map((c) => {
-                const isSelected = selectedColor.name === c.name;
-                return (
-                  <button
-                    key={c.name}
-                    type="button"
-                    onClick={() => setSelectedColor(c)}
-                    style={{
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '50%',
-                      backgroundColor: c.hex,
-                      border: isSelected ? '2px solid #0C131A' : '1px solid rgba(0,0,0,0.2)',
-                      boxShadow: isSelected ? '0 0 0 3px rgba(238, 89, 43, 0.35)' : 'none',
-                      cursor: 'pointer',
-                      transform: isSelected ? 'scale(1.15)' : 'scale(1)',
-                      transition: 'all var(--transition-fast)'
-                    }}
-                    title={c.name}
-                  />
-                );
-              })}
-            </div>
+
+            {/* Size selector */}
+            {currentProduct.sizes && currentProduct.sizes.length > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.08em', color: 'rgba(12, 19, 26, 0.6)' }}>
+                  SIZE:
+                </span>
+                <div style={{ display: 'flex', gap: '0.35rem' }}>
+                  {currentProduct.sizes.map((sz) => {
+                    const isSelected = selectedSize === sz;
+                    return (
+                      <button
+                        key={sz}
+                        type="button"
+                        onClick={() => setSelectedSize(sz)}
+                        style={{
+                          padding: '0.2rem 0.55rem',
+                          borderRadius: 'var(--radius-sm)',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          border: isSelected ? '1.5px solid #0C131A' : '1px solid rgba(12, 19, 26, 0.2)',
+                          backgroundColor: isSelected ? '#0C131A' : 'transparent',
+                          color: isSelected ? '#FFFFFF' : '#0C131A',
+                          transition: 'all var(--transition-fast)'
+                        }}
+                      >
+                        {sz}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* ORDER NOW Button */}
           <div style={{
-            gridColumn: 'span 4',
+            gridColumn: 'span 3',
             display: 'flex',
             justifyContent: 'flex-end'
           }} className="spotlight-col-btn">
@@ -250,13 +346,13 @@ export const ProductSpotlightSection = ({ products = [] }) => {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.75rem',
-                backgroundColor: '#0C131A',
+                gap: '0.65rem',
+                backgroundColor: isAdded ? 'var(--badge-ready)' : '#0C131A',
                 color: '#FFFFFF',
                 fontWeight: 800,
                 fontSize: '0.8rem',
                 letterSpacing: '0.1em',
-                padding: '0.85rem 1.8rem',
+                padding: '0.85rem 1.6rem',
                 borderRadius: 'var(--radius-full)',
                 border: 'none',
                 cursor: 'pointer',
@@ -264,15 +360,19 @@ export const ProductSpotlightSection = ({ products = [] }) => {
                 boxShadow: '0 8px 25px rgba(12, 19, 26, 0.2)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--bg-sunset)';
-                e.currentTarget.style.transform = 'translateY(-2px)';
+                if (!isAdded) {
+                  e.currentTarget.style.backgroundColor = 'var(--bg-sunset)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#0C131A';
-                e.currentTarget.style.transform = 'none';
+                if (!isAdded) {
+                  e.currentTarget.style.backgroundColor = '#0C131A';
+                  e.currentTarget.style.transform = 'none';
+                }
               }}
             >
-              <span>ORDER NOW</span>
+              <span>{isAdded ? 'ADDED!' : 'ORDER NOW'}</span>
               <div style={{
                 width: '20px',
                 height: '20px',
@@ -283,7 +383,7 @@ export const ProductSpotlightSection = ({ products = [] }) => {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <ArrowRight size={13} strokeWidth={3} />
+                {isAdded ? <Check size={13} strokeWidth={3} /> : <ArrowRight size={13} strokeWidth={3} />}
               </div>
             </button>
           </div>

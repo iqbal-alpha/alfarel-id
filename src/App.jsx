@@ -4,6 +4,7 @@ import { useCart } from './context/CartContext';
 import { initialProducts, initialCategories, initialStoreSettings } from './data/mockProducts';
 
 import { Header } from './components/Header';
+import { AnnouncementBar } from './components/AnnouncementBar';
 import { MarqueeTicker } from './components/MarqueeTicker';
 import { EditorialHero } from './components/EditorialHero';
 import { AboutSection } from './components/AboutSection';
@@ -196,6 +197,26 @@ export function MainStore() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-sand)' }}>
+      {/* 0. Top Announcement Bar */}
+      <AnnouncementBar
+        announcementText={lang === 'en' ? (storeSettings.announcement_en || storeSettings.announcement_id) : (storeSettings.announcement_id || storeSettings.announcement_en)}
+      />
+      {storeSettings.isStoreOpen === false && (
+        <div style={{
+          backgroundColor: 'var(--color-accent-coral)',
+          color: '#FFFFFF',
+          textAlign: 'center',
+          padding: '0.45rem 1rem',
+          fontSize: '0.8rem',
+          fontWeight: 700,
+          letterSpacing: '0.04em'
+        }}>
+          {lang === 'en'
+            ? 'Store orders are temporarily paused. You can still browse all collections.'
+            : 'Penerimaan pesanan toko sedang dijeda sementara. Anda tetap dapat menjelajahi seluruh koleksi.'}
+        </div>
+      )}
+
       {/* 1. Sticky Editorial Header (referensi.webp) */}
       <Header
         onOpenSearch={handleOpenSearchFocus}

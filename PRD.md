@@ -222,12 +222,17 @@ Mohon konfirmasi pesanan dan nomor rekening / QRIS pembayaran ya kak. Terima kas
   * **Edit & Delete Product**: Mengubah data produk yang sudah ada secara instan.
   * **Store Settings**: Mengubah nomor WhatsApp admin penerima pesanan, status toko (Buka/Tutup sementara), dan teks banner pengumuman.
 
-### 4.7 Sistem Dwibahasa (Bilingual: ID & EN)
-* Tombol switch bahasa instan (*ID* / *EN*) di navbar tanpa me-reload halaman (*zero flicker*).
-* Menyimpan preferensi bahasa di `localStorage` (key: `alfarel_lang`).
-* Kamus terjemahan i18n mencakup:
-  * Label navigasi, tombol CTA, placeholder input, badge status stok, opsi ongkir, pesan checkout, dan keterangan mini cart.
+### 4.7 Sistem Dwibahasa & Standar Editorial Internasional (English-First Coastal Standard)
+* **English-First Default**: Seluruh antarmuka publik secara default disajikan dalam Bahasa Inggris editorial yang bersih, elegan, dan ramah wisatawan/pembeli internasional.
+* **Tombol Switch Bahasa Instan (*ID* / *EN*)**: Tersedia di navbar/announcement bar tanpa me-reload halaman (*zero flicker*).
+* **Menyimpan Preferensi Bahasa**: Disimpan di `localStorage` (key: `alfarel_lang`).
+* **Kamus Terjemahan i18n**:
+  * Label navigasi, tombol CTA, placeholder input, badge status stok (*Ready to Ship* / *Siap Kirim*), opsi ongkir, pesan checkout, dan keterangan mini cart.
   * Kolom judul dan deskripsi produk di database mendukung `name_id` & `name_en` serta `description_id` & `description_en` (dengan fallback otomatis ke versi ID jika EN kosong).
+* **Standar Brand Authenticity & No-Fabrication**:
+  * Larangan keras klaim palsu seperti "3.5+ Million Satisfied Shoppers" atau bintang review fiktif tanpa data ulasan riil.
+  * Menampilkan narasi butik coastal otentik: *"Small Batch Craft"*, *"100% Breathable Linen"*, dan *"Ethically Crafted in Bali"*.
+  * Seluruh harga disajikan dalam format konsisten `IDR xxx,xxx` / `Rp xxx.xxx`.
 
 ---
 

@@ -161,72 +161,45 @@ export const EditorialHero = () => {
             </a>
           </div>
 
-          {/* Right Social Proof - Floating badge matching referensi.webp */}
+          {/* Right Brand Badge - Authentic resort atelier claim */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.85rem'
           }}>
-            {/* Avatar Stack */}
-            <div style={{ display: 'flex' }}>
-              <div style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                border: '2px solid #0A0E13',
-                overflow: 'hidden',
-                backgroundColor: 'var(--bg-sunset)'
-              }}>
-                <img src={editorialAssets.collection002} alt="Customer" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <div style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                border: '2px solid #0A0E13',
-                overflow: 'hidden',
-                marginLeft: '-10px',
-                backgroundColor: 'var(--color-seafoam)'
-              }}>
-                <img src={editorialAssets.collection001} alt="Customer" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <div style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                border: '2px solid #0A0E13',
-                overflow: 'hidden',
-                marginLeft: '-10px',
-                backgroundColor: 'var(--bg-ticker)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#0A0E13',
-                fontWeight: 900,
-                fontSize: '0.82rem'
-              }}>
-                ★
-              </div>
+            <div style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
+              backgroundColor: 'rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--bg-ticker)',
+              fontSize: '0.75rem',
+              fontWeight: 800
+            }}>
+              100%
             </div>
-
             <div>
               <div style={{
-                fontSize: '0.92rem',
-                fontWeight: 900,
+                fontSize: '0.88rem',
+                fontWeight: 800,
                 color: '#FFFFFF',
                 letterSpacing: '0.04em',
                 lineHeight: 1.2
               }}>
-                3.5+ MILLION
+                SMALL BATCH CRAFT
               </div>
               <div style={{
                 fontSize: '0.68rem',
                 fontWeight: 700,
                 letterSpacing: '0.12em',
-                color: 'rgba(255, 255, 255, 0.6)',
+                color: 'rgba(255, 255, 255, 0.65)',
                 textTransform: 'uppercase'
               }}>
-                SATISFIED SHOPPERS
+                NATURAL BREATHABLE LINEN
               </div>
             </div>
           </div>

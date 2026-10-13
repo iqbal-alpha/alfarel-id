@@ -163,7 +163,7 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
               fontSize: '0.6875rem',
               color: 'var(--text-tertiary)'
             }}>
-              {product.stockStatus === 'ready' ? 'Siap Kirim' : ''}
+              {product.stockStatus === 'ready' ? (lang === 'en' ? 'Ready to Ship' : 'Siap Kirim') : ''}
             </span>
           </div>
 
@@ -223,7 +223,7 @@ export const ProductCard = ({ product, onSelectProduct, onQuickAdd }) => {
                 color: 'var(--text-tertiary)',
                 marginLeft: '0.2rem'
               }}>
-                {product.colors?.length} warna
+                {product.colors?.length} {lang === 'en' ? (product.colors?.length === 1 ? 'color' : 'colors') : 'warna'}
               </span>
             </div>
           )}
