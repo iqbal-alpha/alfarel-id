@@ -10,7 +10,7 @@ export const EditorialHero = () => {
   }, []);
 
   return (
-    <section style={{
+    <section id="hero-section" style={{
       position: 'relative',
       backgroundColor: '#0A0E13',
       background: 'radial-gradient(circle at 50% 40%, rgba(28, 38, 48, 0.85) 0%, #080C10 75%)',

@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 export const NextDropBanner = () => {
   return (
-    <section style={{
+    <section id="next-drop-banner" style={{
       position: 'relative',
       backgroundColor: '#0C131A',
       color: '#FFFFFF',

@@ -4,7 +4,7 @@ import { ArrowRight, MessageCircle, MapPin, Instagram } from 'lucide-react';
 
 export const PhilosophyFooterSection = () => {
   return (
-    <footer style={{
+    <footer id="philosophy-footer" style={{
       backgroundColor: '#0C131A',
       color: '#FFFFFF',
       paddingTop: '6rem',

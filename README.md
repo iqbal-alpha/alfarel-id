@@ -1,4 +1,4 @@
-# 🌊 AlfaREL.ID Store — High-End Coastal Apparel & E-Commerce Platform
+# AlfaREL.ID Store — High-End Coastal Apparel Platform
 
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -8,225 +8,231 @@
 [![WCAG](https://img.shields.io/badge/Accessibility-WCAG%20AA%20Compliant-1E6B7B?style=flat-square)](https://www.w3.org/WAI/standards-guidelines/wcag/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-> 🌐 **Live Website:** [https://alfarel-id.pages.dev](https://alfarel-id.pages.dev/)  
-> **AlfaREL.ID Store** is a high-performance, editorial-grade e-commerce storefront crafted for relaxed coastal streetwear and vacation apparel. Built with a bespoke design system, seamless WhatsApp direct checkout, real-time inventory synchronization, and comprehensive accessibility (WCAG AA).
+Live Deployment: [https://alfarel-id.pages.dev](https://alfarel-id.pages.dev/)
+
+AlfaREL.ID Store is a high-performance e-commerce storefront built for coastal streetwear and resort apparel. The platform combines editorial typography, zero-bloat design tokens, frictionless direct WhatsApp checkout, real-time Supabase inventory synchronization, and WCAG AA accessibility compliance.
 
 ---
 
-## 📸 Visual Showcase
+## Visual Showcase
 
-### Desktop & Mobile Preview
+### Desktop and Mobile Overview
+
 | Desktop Experience (1440px) | Mobile Experience (390px) |
 | :---: | :---: |
 | ![Desktop Preview](screenshots/preview.png) | ![Mobile Preview](screenshots/mobile_preview.png) |
 
 ---
 
-## ✨ Key Feature Highlights & Architecture
+## Core Sections and Architecture
 
-### 1. 🏄 High-Fashion Editorial Hero & Ambient Ticker
-- **Bespoke Layered Hero:** Multi-plane composition featuring oversized brand typography, model cutout integration, live metadata pill badges, and tactile micro-interactions.
-- **Hardware-Accelerated Marquee:** Continuous 60fps GPU-accelerated infinite ticker with pause-on-hover interaction and full `prefers-reduced-motion` compliance.
+### 1. Editorial Hero
 
-![Hero Section](screenshots/01-hero-editorial.png)
+The hero section features multi-layered composition with oversized brand typography, model cutout integration, live metadata tags, and smooth directional call-to-actions.
 
----
-
-### 2. 📖 Editorial Brand Narrative & Top Collections
-- **Asymmetric 3-Column Storytelling:** High-cadence editorial layout introducing the AlfaREL coastal lifestyle.
-- **Numbered Drop Series [001] & [002]:** Curated product capsule showcases with warm sand daylight tones and subtle elevation physics.
-
-![About and Top Collections](screenshots/02-about-and-top-collections.png)
+![Editorial Hero](screenshots/01-hero-editorial.png)
 
 ---
 
-### 3. 🌅 Featured Products Carousel in Sunset Terracotta
-- **Fluid Multi-Card Carousel:** Smooth horizontal browsing experience with quick-action variant triggers (`+ Add to Cart`) and instant product modal previews.
-- **Calibrated Color Harmony:** High-contrast terracotta canvas (`#EE592B`) engineered to draw focus to core seasonal apparel drops.
+### 2. Brand Narrative
 
-![Featured Carousel](screenshots/03-featured-carousel.png)
+An asymmetric three-column layout presenting brand origins, sustainable linen sourcing philosophies, and editorial photography.
 
----
-
-### 4. 🌙 Twilight Mood Gallery with Ghost Typography
-- **Deep Ocean Slate Canvas:** Editorial night-mode transition featuring floating polaroid-style photography and layered typographic depth.
-
-![Twilight Mood Gallery](screenshots/04-twilight-mood-gallery.png)
+![Brand Narrative](screenshots/02-about-editorial.png)
 
 ---
 
-### 5. 🎛️ Interactive Curations & Live Product Spotlight Configurator
-- **Dynamic Category Previews:** Real-time hover preview cards showcasing curated style edits (Resort Linen, Sunset Boardshorts, Oversized Beach Tees).
-- **Spotlight Configurator:** Interactive color swatch selector, real-time variant pricing, instant stock badge indicators, and 1-click cart insertion.
+### 3. Top Collection Series
 
-![Curations and Spotlight](screenshots/05-curations-and-spotlight.png)
+Numbered capsule showcases featuring numbered drop indicators, structured metadata, and balanced typography.
 
----
-
-### 6. 📦 Next Drop Countdown, Search & Filterable Catalog
-- **Next Drop Urgency Banner:** Visual campaign countdown with early VIP access trigger.
-- **Instant Search & Multi-Category Filter:** Zero-latency client-side search across bilingual product titles, categories, and tags.
-- **Stock Badges & Variant Selectors:** Clear visual cues for Ready Stock, Low Stock, Pre-Order, and Sold Out states.
-
-![Drop Banner and Catalog](screenshots/06-drop-banner-and-catalog.png)
+![Top Collection](screenshots/03-top-collection.png)
 
 ---
 
-### 7. 💬 Frictionless WhatsApp Direct Checkout
-- **Instant WhatsApp Order Generator:** Eliminates expensive payment gateway commission fees and mandatory account sign-up drop-offs. Formats structured order summaries directly into WhatsApp:
-  - Customer details & shipping destination
-  - Item breakdown with selected sizes, colors, and quantities
-  - Subtotal calculation & automated payment instructions
-- **Persistent Cart Drawer:** Client-side persisted shopping cart with reactive item counts and sliding drawer animation.
+### 4. Featured Product Carousel
+
+A horizontal product slider set against a warm terracotta canvas, with interactive variant previews and quick-add actions.
+
+![Featured Product Carousel](screenshots/04-featured-carousel.png)
 
 ---
 
-### 8. 🏛️ Philosophy Statement & Dual Monochrome Footer
-- **Signature Brand Manifesto:** Giant editorial typography paired with dual black-and-white visual anchors.
-- **Comprehensive Footer:** Quick navigation, customer service links, and security guarantees.
+### 5. Twilight Mood Gallery
 
-![Philosophy Footer](screenshots/07-philosophy-footer.png)
+A high-contrast deep ocean slate section incorporating layered ghost typography and asymmetric polaroid compositions.
+
+![Twilight Mood Gallery](screenshots/05-mood-gallery.png)
 
 ---
 
-## 🛠️ Tech Stack & Engineering Standards
+### 6. Signature Curations
 
-| Layer | Technology | Details |
+An interactive curation showcase pairing real-time category triggers with dedicated preview cards and instant category filtering.
+
+![Signature Curations](screenshots/06-curations-showcase.png)
+
+---
+
+### 7. Flagship Product Configurator
+
+An interactive spotlight module featuring dynamic color swatches, size selectors, real-time stock status, and direct cart insertion.
+
+![Product Configurator](screenshots/07-product-spotlight.png)
+
+---
+
+### 8. Next Drop Campaign
+
+A full-width atmospheric banner for upcoming seasonal drops with high-contrast call-to-action routing.
+
+![Next Drop Banner](screenshots/08-next-drop-banner.png)
+
+---
+
+### 9. Filterable Catalog and Instant Search
+
+A client-side catalog with zero-latency bilingual search, category filters, real-time stock indicators, and accessible keyboard-navigable product cards.
+
+![E-Commerce Catalog](screenshots/09-ecommerce-catalog.png)
+
+---
+
+### 10. Philosophy Statement and Dual Footer
+
+Brand manifesto and dual black-and-white editorial portraits, complete with structured navigation links and customer service routes.
+
+![Philosophy and Footer](screenshots/10-philosophy-footer.png)
+
+---
+
+## Technology Stack
+
+| Layer | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Framework** | **React 18** | Functional components, custom hooks, Context API |
-| **Tooling & Build** | **Vite 6** | Ultra-fast HMR, Rollup code-splitting (`React.lazy()`) |
-| **Styling** | **Vanilla CSS Custom Properties** | Zero-bloat design tokens (Sand, Ocean Slate, Terracotta, Lime) |
-| **Icons** | **Lucide React** | Lightweight, tree-shakable SVG icons |
-| **Backend / DB** | **Supabase PostgreSQL** | Row-Level Security (RLS), real-time stock sync |
-| **Security** | **Web Crypto API (SHA-256)** | Salted hash admin authentication, zero plaintext PIN storage |
-| **Localization** | **Custom i18n Context** | Dynamic Bahasa Indonesia & English switching |
-| **Testing** | **Vitest + React Testing Library** | 14 automated unit, integration, and accessibility tests |
-| **Accessibility** | **WCAG AA (2.1)** | Keyboard traps (Escape/Enter), ARIA dialogs, 4.5:1+ contrast |
+| Frontend Framework | React 18 | Component architecture, Context API, state management |
+| Build Tool | Vite 6 | Development server, Rollup bundle optimization, code-splitting |
+| Styling | Vanilla CSS Tokens | Zero-runtime CSS custom properties for typography, spacing, and color palettes |
+| Icons | Lucide React | Lightweight SVG iconography |
+| Backend & Database | Supabase (PostgreSQL) | Row-Level Security (RLS), real-time stock synchronization |
+| Authentication | Web Crypto API (SHA-256) | Salted hash admin authentication for store management |
+| Localization | Custom i18n Context | Dynamic English and Bahasa Indonesia language switching |
+| Testing Suite | Vitest + React Testing Library | Automated unit, accessibility, and integration tests |
+| Accessibility | WCAG AA 2.1 | ARIA dialog attributes, focus visible rings, keyboard traps (Escape/Enter) |
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 ├── public/                     # Static assets, fonts, and headers
-│   ├── images/editorial/       # High-fashion editorial and mood photography
-│   ├── images/products/        # High-resolution product showcase photography
-│   └── _headers                # Cloudflare security and caching headers
-├── screenshots/                # Visual documentation for portfolio preview
+│   ├── images/editorial/       # Editorial and mood photography
+│   ├── images/products/        # Product catalog imagery
+│   ├── _headers                # Security and caching headers (Cloudflare)
+│   └── _redirects              # SPA routing rewrite rule
+├── screenshots/                # Visual documentation assets
 ├── src/
-│   ├── components/             # 20+ modular React UI components
-│   │   ├── EditorialHero.jsx   # Hero banner with cutout model & typography
-│   │   ├── MarqueeTicker.jsx   # Continuous running marquee
-│   │   ├── FeaturedProductsSection.jsx # Terracotta carousel
-│   │   ├── ProductSpotlightSection.jsx # Color & variant configurator
-│   │   ├── CartDrawer.jsx      # Slide-over shopping bag
-│   │   ├── CheckoutModal.jsx   # WhatsApp fast checkout modal
-│   │   ├── AdminPanel.jsx      # Protected CRUD & stock management
+│   ├── components/             # Reusable UI components
+│   │   ├── AboutSection.jsx
+│   │   ├── AdminPanel.jsx      # Protected store administration
+│   │   ├── CartDrawer.jsx      # Shopping cart drawer
+│   │   ├── CheckoutModal.jsx   # WhatsApp checkout flow
+│   │   ├── CuratedBrandsSection.jsx
+│   │   ├── EditorialHero.jsx
+│   │   ├── EditorialMoodGallery.jsx
+│   │   ├── FeaturedProductsSection.jsx
+│   │   ├── Header.jsx
+│   │   ├── NextDropBanner.jsx
+│   │   ├── PhilosophyFooterSection.jsx
+│   │   ├── ProductCard.jsx
+│   │   ├── ProductDetailModal.jsx
+│   │   ├── ProductSpotlightSection.jsx
 │   │   └── ...
-│   ├── context/                # CartContext (local storage persistence)
-│   ├── data/                   # Initial catalog & editorial configurations
-│   ├── i18n/                   # Multi-language translations (EN / ID)
-│   ├── lib/                    # Supabase client & WhatsApp message payload builder
-│   ├── __tests__/              # Vitest test suites (A11y, Cart, WhatsApp, Admin)
-│   ├── App.jsx                 # Main layout & code-split modal imports
-│   └── index.css               # Global design system tokens & typography
+│   ├── context/                # CartContext with localStorage persistence
+│   ├── data/                   # Initial catalog and fallback dataset
+│   ├── i18n/                   # Language definitions (EN / ID)
+│   ├── lib/                    # Supabase client and WhatsApp payload builder
+│   ├── __tests__/              # Automated test suites
+│   ├── App.jsx                 # Application layout and routing
+│   └── index.css               # Global design system tokens
 ├── supabase/
-│   ├── migrations/             # Production PostgreSQL schemas & RLS policies
-│   └── seed.sql                # Initial verified apparel dataset
-├── index.html                  # HTML5 entry with preconnected Google Fonts
-├── vite.config.js              # Vite configuration & Vitest test runner setup
-└── package.json                # Project dependencies and npm scripts
+│   ├── migrations/             # Database schemas and security policies
+│   └── seed.sql                # Initial dataset
+├── index.html                  # HTML entry point
+├── package.json
+└── vite.config.js
 ```
 
 ---
 
-## ⚡ Getting Started Locally
+## Getting Started
 
 ### Prerequisites
-- **Node.js** `>= 18.0.0`
-- **npm** `>= 9.0.0`
+
+- Node.js >= 18.0.0
+- npm >= 9.0.0
 
 ### Installation
 
-1. **Clone the repository:**
+1. Clone the repository:
    ```bash
    git clone https://github.com/iqbal-alpha/alfarel-id.git
    cd alfarel-id
    ```
 
-2. **Install dependencies:**
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-3. **Configure Environment Variables:**
+3. Configure environment variables:
    ```bash
    cp .env.example .env
    ```
-   Edit `.env` with your Supabase credentials (optional for local mock mode):
+   Set up your Supabase and WhatsApp details:
    ```env
    VITE_SUPABASE_URL=https://your-project-id.supabase.co
    VITE_SUPABASE_ANON_KEY=your-anon-key
    VITE_STORE_WHATSAPP=6281234567890
    ```
 
-4. **Start the Development Server:**
+4. Start the development server:
    ```bash
    npm run dev
    ```
-   Open `http://localhost:3000` in your browser.
+   Access the application at `http://localhost:3000`.
 
 ---
 
-## 🧪 Testing & Verification
+## Testing and Quality Assurance
 
-Run the automated test suite covering cart state, accessibility keyboard navigation, admin security, and WhatsApp formatters:
+Run the automated test suite covering cart state transitions, accessibility compliance, and WhatsApp payload generation:
 
 ```bash
-# Run all tests once
 npm test
-
-# Run tests in watch mode
-npx vitest
 ```
 
-**Test Results:**
-```text
- ✓ src/__tests__/CartContext.test.jsx (5 tests)
- ✓ src/__tests__/a11y.test.jsx (2 tests)
- ✓ src/__tests__/adminAuth.test.js (2 tests)
- ✓ src/__tests__/whatsappMessage.test.js (5 tests)
-
- Test Files  4 passed (4)
-      Tests  14 passed (14)
-```
+Test coverage includes:
+- Cart persistence and quantity mutation
+- Modal accessibility (`role="dialog"`, `aria-modal="true"`, Escape key handling)
+- Keyboard interaction on product cards
+- WhatsApp message formatting and markdown sanitization
+- Admin authentication verification
 
 ---
 
-## 🚀 Production Build & Deployment
+## Deployment
 
-The application is deployed live on **Cloudflare Pages**:
-- **Production URL:** [https://alfarel-id.pages.dev](https://alfarel-id.pages.dev/)
-- **Deployment Platform:** Cloudflare Pages (Continuous Integration via GitHub)
-- **Framework Preset:** `React (Vite)`
-- **Build Command:** `npm run build`
-- **Build Output Directory:** `dist`
-- **SPA Routing & Security:** Powered by `public/_redirects` (200 catch-all routing) and `public/_headers` (OWASP/CSP hardened headers).
+The application is deployed on Cloudflare Pages:
 
-To generate an optimized local static production bundle:
-
-```bash
-npm run build
-```
+- Production URL: [https://alfarel-id.pages.dev](https://alfarel-id.pages.dev/)
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- SPA Routing: Handled via `public/_redirects`
+- Security Headers: Configured via `public/_headers` (Content-Security-Policy, X-Frame-Options, Referrer-Policy)
 
 ---
 
-## 📄 License
+## License
 
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-<p align="center">
-  Crafted with dedication to frontend precision, typography, and performance.
-</p>
+This project is licensed under the MIT License.

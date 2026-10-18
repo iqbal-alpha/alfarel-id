@@ -67,7 +67,7 @@ export const ProductSpotlightSection = ({ products = [] }) => {
   const displayImage = currentProduct.images?.[0] || editorialAssets.spotlightModel;
 
   return (
-    <section style={{
+    <section id="product-spotlight" style={{
       backgroundColor: 'var(--bg-sand)',
       color: '#0C131A',
       padding: '5.5rem 1.5rem',

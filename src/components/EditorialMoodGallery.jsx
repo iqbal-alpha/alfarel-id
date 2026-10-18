@@ -3,7 +3,7 @@ import { editorialAssets } from '../data/editorialAssets';
 
 export const EditorialMoodGallery = () => {
   return (
-    <section style={{
+    <section id="mood-gallery" style={{
       backgroundColor: '#0C131A',
       color: '#FFFFFF',
       padding: '7rem 1.5rem',
