@@ -114,6 +114,8 @@ A minimalist, lazy-loaded style assistant (`ChatWidget.jsx`) connected to real-t
 - **Edge AI Architecture:** Powered by Google AI Studio (`gemini-3.5-flash-lite`) server-side with `GEMINI_API_KEY` hidden in Cloudflare Secrets and optional OpenRouter `:free` fallback.
 - **Shoppable Chat Cards & WhatsApp Handover:** Validates model responses against active product IDs to render clickable **Detail** and **+ Bag** cards directly in chat, plus 1-click WhatsApp handover when rate-limited or paused.
 
+![AI Coastal Concierge](screenshots/11-ai-concierge-chatbot.jpg)
+
 ---
 
 ## Technology Stack
