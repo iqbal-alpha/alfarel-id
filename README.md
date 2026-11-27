@@ -10,7 +10,7 @@
 
 Live Deployment: [https://alfarel-id.pages.dev](https://alfarel-id.pages.dev/)
 
-AlfaREL.ID Store is a high-performance e-commerce storefront built for coastal streetwear and resort apparel. The platform combines editorial typography, zero-bloat design tokens, frictionless direct WhatsApp checkout, real-time Supabase inventory synchronization, and WCAG AA accessibility compliance.
+AlfaREL.ID Store is a high-performance e-commerce storefront built for coastal streetwear and resort apparel. The platform combines editorial typography, zero-bloat design tokens, frictionless direct WhatsApp checkout, real-time Supabase inventory synchronization, a live-catalog AI Coastal Concierge chatbot, and WCAG AA accessibility compliance.
 
 ---
 
@@ -103,6 +103,16 @@ A client-side catalog with zero-latency bilingual search, category filters, real
 Brand manifesto and dual black-and-white editorial portraits, complete with structured navigation links and customer service routes.
 
 ![Philosophy and Footer](screenshots/10-philosophy-footer.png)
+
+---
+
+### 11. AI Coastal Concierge (Live-Catalog Chatbot)
+
+A minimalist, lazy-loaded style assistant (`ChatWidget.jsx`) connected to real-time Supabase catalog & store settings via a Cloudflare Pages Function (`POST /api/chat`):
+
+- **Live Catalog Grounding:** Answers sizing, material, stock status, and flat shipping queries using active public SKUs from `alfarel_products` and `alfarel_store_settings` (with zero access to private customer `alfarel_order_logs` or `alfarel_admin_auth`).
+- **Edge AI Architecture:** Powered by Google AI Studio (`gemini-3.5-flash-lite`) server-side with `GEMINI_API_KEY` hidden in Cloudflare Secrets and optional OpenRouter `:free` fallback.
+- **Shoppable Chat Cards & WhatsApp Handover:** Validates model responses against active product IDs to render clickable **Detail** and **+ Bag** cards directly in chat, plus 1-click WhatsApp handover when rate-limited or paused.
 
 ---
 
@@ -238,7 +248,7 @@ The application is deployed on Cloudflare Pages:
 - Edge AI Secrets (Cloudflare Dashboard > Settings > Variables and Secrets):
   - `GEMINI_API_KEY`: Google AI Studio key for `gemini-3.5-flash-lite`
   - `OPENROUTER_API_KEY` *(optional)*: Fallback key for OpenRouter `:free` models
-  - `SUPABASE_URL` & `SUPABASE_ANON_KEY`: Public catalog read access for `/api/chat`
+  - `SUPABASE_URL` & `SUPABASE_ANON_KEY` *(or existing `VITE_SUPABASE_URL` & `VITE_SUPABASE_ANON_KEY`)*: Public catalog read access for `/api/chat`
 - Local Full-Stack Emulation: Copy `.dev.vars.example` to `.dev.vars`, build with `npm run build`, and run `npx wrangler pages dev dist`
 
 ---
