@@ -4,7 +4,7 @@
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Cloudflare Pages](https://img.shields.io/badge/Cloudflare_Pages-alfarel--id.pages.dev-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://alfarel-id.pages.dev/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL%20RLS-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Vitest](https://img.shields.io/badge/Tests-14%2F14%20Passing-729B1B?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Tests-32%2F32%20Passing-729B1B?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
 [![WCAG](https://img.shields.io/badge/Accessibility-WCAG%20AA%20Compliant-1E6B7B?style=flat-square)](https://www.w3.org/WAI/standards-guidelines/wcag/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
@@ -115,6 +115,7 @@ Brand manifesto and dual black-and-white editorial portraits, complete with stru
 | Styling | Vanilla CSS Tokens | Zero-runtime CSS custom properties for typography, spacing, and color palettes |
 | Icons | Lucide React | Lightweight SVG iconography |
 | Backend & Database | Supabase (PostgreSQL) | Row-Level Security (RLS), real-time stock synchronization |
+| Edge AI Assistant | Cloudflare Pages Functions + Gemini Flash-Lite | Live-catalog AI Coastal Concierge (`POST /api/chat`) with optional OpenRouter `:free` fallback |
 | Authentication | Web Crypto API (SHA-256) | Salted hash admin authentication for store management |
 | Localization | Custom i18n Context | Dynamic English and Bahasa Indonesia language switching |
 | Testing Suite | Vitest + React Testing Library | Automated unit, accessibility, and integration tests |
@@ -125,6 +126,8 @@ Brand manifesto and dual black-and-white editorial portraits, complete with stru
 ## Repository Structure
 
 ```text
+├── functions/                  # Cloudflare Pages Functions (serverless edge API)
+│   └── api/chat.js             # Gemini Flash-Lite AI concierge endpoint
 ├── public/                     # Static assets, fonts, and headers
 │   ├── images/editorial/       # Editorial and mood photography
 │   ├── images/products/        # Product catalog imagery
@@ -136,6 +139,7 @@ Brand manifesto and dual black-and-white editorial portraits, complete with stru
 │   │   ├── AboutSection.jsx
 │   │   ├── AdminPanel.jsx      # Protected store administration
 │   │   ├── CartDrawer.jsx      # Shopping cart drawer
+│   │   ├── ChatWidget.jsx      # Lazy-loaded AI Coastal Concierge widget
 │   │   ├── CheckoutModal.jsx   # WhatsApp checkout flow
 │   │   ├── CuratedBrandsSection.jsx
 │   │   ├── EditorialHero.jsx
@@ -151,7 +155,7 @@ Brand manifesto and dual black-and-white editorial portraits, complete with stru
 │   ├── context/                # CartContext with localStorage persistence
 │   ├── data/                   # Initial catalog and fallback dataset
 │   ├── i18n/                   # Language definitions (EN / ID)
-│   ├── lib/                    # Supabase client and WhatsApp payload builder
+│   ├── lib/                    # Supabase client, chat assistant, and WhatsApp payload builder
 │   ├── __tests__/              # Automated test suites
 │   ├── App.jsx                 # Application layout and routing
 │   └── index.css               # Global design system tokens
@@ -218,6 +222,7 @@ Test coverage includes:
 - Keyboard interaction on product cards
 - WhatsApp message formatting and markdown sanitization
 - Admin authentication verification
+- AI Coastal Concierge prompt grounding, input/output sanitization, Cloudflare `/api/chat` proxy, and ChatWidget interaction
 
 ---
 
@@ -230,6 +235,11 @@ The application is deployed on Cloudflare Pages:
 - Output Directory: `dist`
 - SPA Routing: Handled via `public/_redirects`
 - Security Headers: Configured via `public/_headers` (Content-Security-Policy, X-Frame-Options, Referrer-Policy)
+- Edge AI Secrets (Cloudflare Dashboard > Settings > Variables and Secrets):
+  - `GEMINI_API_KEY`: Google AI Studio key for `gemini-3.5-flash-lite`
+  - `OPENROUTER_API_KEY` *(optional)*: Fallback key for OpenRouter `:free` models
+  - `SUPABASE_URL` & `SUPABASE_ANON_KEY`: Public catalog read access for `/api/chat`
+- Local Full-Stack Emulation: Copy `.dev.vars.example` to `.dev.vars`, build with `npm run build`, and run `npx wrangler pages dev dist`
 
 ---
 

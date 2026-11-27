@@ -31,6 +31,9 @@ const CheckoutModal = React.lazy(() =>
 const AdminPanel = React.lazy(() =>
   import('./components/AdminPanel').then((m) => ({ default: m.AdminPanel }))
 );
+const ChatWidget = React.lazy(() =>
+  import('./components/ChatWidget').then((m) => ({ default: m.ChatWidget }))
+);
 import {
   isSupabaseConfigured,
   getCategories,
@@ -457,6 +460,17 @@ export function MainStore() {
 
       {/* Floating Cart Launcher Button */}
       <FloatingCartButton />
+
+      {/* AI Coastal Concierge Chat Widget (Hidden in Admin View) */}
+      {!isAdminView && (
+        <React.Suspense fallback={null}>
+          <ChatWidget
+            products={products}
+            storeSettings={storeSettings}
+            onSelectProduct={(p) => setSelectedProduct(p)}
+          />
+        </React.Suspense>
+      )}
 
       {/* Slide-out Cart Drawer with Instant WhatsApp Checkout */}
       <CartDrawer

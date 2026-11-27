@@ -7,7 +7,9 @@ dist-ssr
 *.local
 .env
 .env.*
+.dev.vars
 !.env.example
+!.dev.vars.example
 
 # Operating System & IDE
 .DS_Store
@@ -18,11 +20,14 @@ Thumbs.db
 
 # Testing & Coverage
 coverage/
+.wrangler/
 
 # Internal Planning, Specs & Reference Files
 referensi.webp
 PRD.md
+PRD-CHATBOT.md
 audit.md
+Capture/
 docs/
 
 # AI Tooling, Agents & Prompting Workflows

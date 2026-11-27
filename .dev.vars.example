@@ -1,0 +1,15 @@
+# ==============================================================================
+# Cloudflare Pages Functions Local Development Variables (.dev.vars)
+# Copy this file to `.dev.vars` for `npx wrangler pages dev dist`
+# NEVER commit `.dev.vars` to version control.
+# ==============================================================================
+
+GEMINI_API_KEY="your-google-ai-studio-api-key"
+GEMINI_MODEL="gemini-3.5-flash-lite"
+
+# Optional secondary fallback (only :free models used)
+OPENROUTER_API_KEY=""
+
+# Supabase Public Catalog Access (safe anon read only)
+SUPABASE_URL="https://your-project-id.supabase.co"
+SUPABASE_ANON_KEY="your-anon-public-key"
